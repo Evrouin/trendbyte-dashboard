@@ -33,6 +33,12 @@ body {
   font-family: var(--font-sans);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+html {
+  background: var(--color-bg);
+  overscroll-behavior: none;
 }
 
 .glass-card {
