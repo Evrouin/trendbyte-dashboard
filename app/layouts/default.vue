@@ -10,6 +10,7 @@
           <NuxtLink to="/trends" class="transition hover:text-text">Trends</NuxtLink>
           <NuxtLink to="/predictions" class="transition hover:text-text">Predictions</NuxtLink>
           <NuxtLink to="/categories" class="transition hover:text-text">Categories</NuxtLink>
+          <NuxtLink to="/news" class="transition hover:text-text">News</NuxtLink>
         </div>
       </div>
     </nav>

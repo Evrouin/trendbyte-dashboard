@@ -33,6 +33,13 @@ export const useApi = () => {
     return useFetch<{ categories: import('~/types').Category[] }>(`${baseUrl}/api/categories`)
   }
 
+  const fetchNews = (params?: { source?: string; limit?: number }) => {
+    return useFetch<{
+      news: { source: string; name: string; url: string; description: string; stars: number; collected_at: string }[]
+      count: number
+    }>(`${baseUrl}/api/news`, { params })
+  }
+
   return {
     fetchStats,
     fetchTrends,
@@ -40,5 +47,6 @@ export const useApi = () => {
     fetchTrendsByCategory,
     fetchPredictions,
     fetchCategories,
+    fetchNews,
   }
 }
