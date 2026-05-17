@@ -5,7 +5,8 @@
       <p class="mt-1 text-text-secondary">Tech trend intelligence overview</p>
     </section>
 
-    <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <SkeletonLoader v-if="statsPending" />
+    <section v-else-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
         <p class="mt-1 text-sm text-text-secondary">Mentions</p>
@@ -24,64 +25,69 @@
       </div>
     </section>
 
-    <section v-if="trends?.trends" class="mb-10">
-      <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
-      <div class="glass-card p-6" style="height: 300px">
-        <ClientOnly>
-          <BarChart
-            :labels="trends.trends.map((t) => t.name)"
-            :values="trends.trends.map((t) => Math.round(t.score))"
-          />
-        </ClientOnly>
-      </div>
-    </section>
+    <SkeletonLoader v-if="trendsPending" />
+    <ErrorState v-else-if="trendsError" message="Failed to load trends" :retry="true" @retry="refreshTrends" />
+    <template v-else-if="trends?.trends">
+      <section class="mb-10">
+        <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
+        <div class="glass-card p-6" style="height: 300px">
+          <ClientOnly>
+            <BarChart
+              :labels="trends.trends.map((t) => t.name)"
+              :values="trends.trends.map((t) => Math.round(t.score))"
+            />
+          </ClientOnly>
+        </div>
+      </section>
 
-    <section v-if="trends?.trends" class="mb-10">
-      <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
-      <div class="glass-card overflow-hidden">
-        <table class="w-full text-left text-sm">
-          <thead class="border-b border-border text-text-secondary">
-            <tr>
-              <th class="px-5 py-3 font-semibold">#</th>
-              <th class="px-5 py-3 font-semibold">Name</th>
-              <th class="px-5 py-3 font-semibold">Score</th>
-              <th class="px-5 py-3 font-semibold">Growth</th>
-              <th class="px-5 py-3 font-semibold">Sources</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(trend, i) in trends.trends"
-              :key="trend.name"
-              class="border-b border-border-subtle last:border-0 transition hover:bg-surface-hover"
-            >
-              <td class="px-5 py-3 text-text-secondary">{{ i + 1 }}</td>
-              <td class="px-5 py-3 font-bold">
-                <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
-                  {{ trend.name }}
-                </NuxtLink>
-              </td>
-              <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
-              <td class="px-5 py-3">
-                <span
-                  class="rounded-full px-2 py-0.5 text-xs font-semibold"
-                  :class="
-                    trend.growth_pct >= 0
-                      ? 'bg-success/20 text-success'
-                      : 'bg-warning/20 text-warning'
-                  "
-                >
-                  {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
-                </span>
-              </td>
-              <td class="px-5 py-3 text-text-secondary">{{ trend.sources.join(', ') }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <section class="mb-10">
+        <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
+        <div class="glass-card overflow-hidden">
+          <table class="w-full text-left text-sm">
+            <thead class="border-b border-border text-text-secondary">
+              <tr>
+                <th class="px-5 py-3 font-semibold">#</th>
+                <th class="px-5 py-3 font-semibold">Name</th>
+                <th class="px-5 py-3 font-semibold">Score</th>
+                <th class="px-5 py-3 font-semibold">Growth</th>
+                <th class="px-5 py-3 font-semibold">Sources</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(trend, i) in trends.trends"
+                :key="trend.name"
+                class="border-b border-border-subtle last:border-0 transition hover:bg-surface-hover"
+              >
+                <td class="px-5 py-3 text-text-secondary">{{ i + 1 }}</td>
+                <td class="px-5 py-3 font-bold">
+                  <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
+                    {{ trend.name }}
+                  </NuxtLink>
+                </td>
+                <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
+                <td class="px-5 py-3">
+                  <span
+                    class="rounded-full px-2 py-0.5 text-xs font-semibold"
+                    :class="
+                      trend.growth_pct >= 0
+                        ? 'bg-success/20 text-success'
+                        : 'bg-warning/20 text-warning'
+                    "
+                  >
+                    {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
+                  </span>
+                </td>
+                <td class="px-5 py-3 text-text-secondary">{{ trend.sources.join(', ') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </template>
 
-    <section v-if="predictions?.predictions?.length">
+    <SkeletonLoader v-if="predPending" />
+    <section v-else-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">
         <div
@@ -103,7 +109,19 @@
 <script setup lang="ts">
 const { fetchStats, fetchTrends, fetchPredictions } = useApi()
 
-const { data: stats } = await fetchStats()
-const { data: trends } = await fetchTrends({ days: 7, limit: 10 })
-const { data: predictions } = await fetchPredictions({ limit: 5 })
+const { data: stats, pending: statsPending } = await fetchStats()
+const {
+  data: trends,
+  pending: trendsPending,
+  error: trendsError,
+  refresh: refreshTrends,
+} = await fetchTrends({ days: 7, limit: 10 })
+const { data: predictions, pending: predPending } = await fetchPredictions({ limit: 5 })
+
+// Auto-refresh every 5 minutes
+const refreshInterval = setInterval(() => {
+  refreshTrends()
+}, 5 * 60 * 1000)
+
+onUnmounted(() => clearInterval(refreshInterval))
 </script>
