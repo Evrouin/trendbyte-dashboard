@@ -99,7 +99,7 @@
           <span class="rounded-full bg-success/30 px-2.5 py-0.5 text-xs font-semibold text-success">
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
-          <span class="text-xs text-text-muted">{{ p.signals.join(', ') }}</span>
+          <span class="text-xs text-text-muted">{{ p.signals.map(formatSignal).join(', ') }}</span>
         </div>
       </div>
     </section>
@@ -107,6 +107,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatSignal } from "~/utils/formatSignal"
+
 const { fetchStats, fetchTrends, fetchPredictions } = useApi()
 
 const { data: stats, pending: statsPending } = await fetchStats()

@@ -28,7 +28,7 @@
               :key="signal"
               class="rounded-md border border-border-subtle bg-surface-hover px-2 py-0.5 text-xs text-text-secondary"
             >
-              {{ signal }}
+              {{ formatSignal(signal) }}
             </span>
           </div>
         </div>
@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatSignal } from "~/utils/formatSignal"
+
 const { fetchPredictions } = useApi()
 const { data: predictions, pending, error, refresh } = await fetchPredictions({ limit: 20 })
 
