@@ -9,6 +9,7 @@ export interface Trend {
 export interface TrendDetail {
   trend: Trend & { top_url: string; calculated_at: string }
   history: { mentions: number; score: number; growth_pct: number; calculated_at: string }[]
+  posts: { source: string; url: string; description: string; stars: number; collected_at: string }[]
 }
 
 export interface Prediction {
