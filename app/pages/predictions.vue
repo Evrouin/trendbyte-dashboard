@@ -3,7 +3,7 @@
     <h1 class="mb-2 text-3xl font-extrabold">Predictions</h1>
     <p class="mb-8 text-text-secondary">Technologies showing early signs of trending.</p>
 
-    <SkeletonLoader v-if="pending" />
+    <SkeletonLoader v-if="pending" variant="grid" />
     <ErrorState v-else-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
     <div v-else-if="predictions?.predictions?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

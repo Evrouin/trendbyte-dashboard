@@ -5,7 +5,7 @@
       <p class="mt-1 text-text-secondary">Tech trend intelligence overview</p>
     </section>
 
-    <SkeletonLoader v-if="statsPending" />
+    <SkeletonLoader v-if="statsPending" variant="cards" />
     <section v-else-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
@@ -25,7 +25,7 @@
       </div>
     </section>
 
-    <SkeletonLoader v-if="trendsPending" />
+    <SkeletonLoader v-if="trendsPending" variant="table" />
     <ErrorState v-else-if="trendsError" message="Failed to load trends" :retry="true" @retry="refreshTrends" />
     <template v-else-if="trends?.trends">
       <section class="mb-10">
@@ -86,7 +86,7 @@
       </section>
     </template>
 
-    <SkeletonLoader v-if="predPending" />
+    <SkeletonLoader v-if="predPending" variant="grid" />
     <section v-else-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">

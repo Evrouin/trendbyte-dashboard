@@ -19,7 +19,7 @@
       </button>
     </div>
 
-    <SkeletonLoader v-if="pending" />
+    <SkeletonLoader v-if="pending" variant="grid" />
     <ErrorState v-else-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
 
     <div v-else-if="news?.news?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

@@ -20,7 +20,7 @@
       </select>
     </div>
 
-    <SkeletonLoader v-if="pending" />
+    <SkeletonLoader v-if="pending" variant="table" />
     <ErrorState v-else-if="error" message="Failed to load trends" :retry="true" @retry="refresh" />
 
     <div v-else-if="filteredTrends.length" class="glass-card overflow-hidden">
