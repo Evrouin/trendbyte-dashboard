@@ -12,7 +12,6 @@
       <select
         v-model="selectedDays"
         class="border-border bg-surface text-text focus:border-accent rounded-lg border px-4 py-2 text-sm outline-none"
-        @change="refresh()"
       >
         <option :value="7">Last 7 days</option>
         <option :value="14">Last 14 days</option>
@@ -78,7 +77,7 @@ useHead({ title: 'Trends — TrendByte' })
 const { fetchTrends } = useApi()
 
 const search = ref('')
-const selectedDays = ref(7)
+const selectedDays = ref(30)
 
 const {
   data: trends,
@@ -87,7 +86,7 @@ const {
   refresh,
 } = useFetch<{ trends: import('~/types').Trend[]; count: number }>(
   `${useRuntimeConfig().public.apiUrl}/api/trends`,
-  { params: { days: selectedDays.value, limit: 30 }, lazy: true },
+  { params: computed(() => ({ days: selectedDays.value, limit: 30 })), lazy: true },
 )
 
 const filteredTrends = computed(() => {
