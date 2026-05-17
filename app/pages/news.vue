@@ -22,24 +22,23 @@
     <SkeletonLoader v-if="pending" />
     <ErrorState v-else-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
 
-    <div v-else-if="news?.news?.length" class="grid gap-3">
+    <div v-else-if="news?.news?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <a
         v-for="item in news.news"
         :key="item.url + item.collected_at"
         :href="item.url"
         target="_blank"
-        class="glass-card flex items-start gap-4 px-5 py-4 transition hover:bg-surface-hover"
+        class="glass-card flex flex-col justify-between p-5 transition hover:bg-surface-hover"
       >
-        <div class="flex-1">
-          <p class="font-medium leading-snug">{{ item.description }}</p>
-          <div class="mt-2 flex items-center gap-3 text-xs text-text-muted">
-            <span class="rounded border border-border-subtle px-1.5 py-0.5">{{ item.source }}</span>
-            <span v-if="item.name" class="text-accent">{{ item.name }}</span>
-            <span v-if="item.stars">{{ item.stars }} points</span>
-            <span>{{ formatDate(item.collected_at) }}</span>
-          </div>
+        <div>
+          <p class="font-medium leading-snug line-clamp-3">{{ item.description }}</p>
         </div>
-        <span class="shrink-0 text-xs text-text-muted">&nearr;</span>
+        <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-text-muted">
+          <span class="rounded border border-border-subtle px-1.5 py-0.5">{{ item.source }}</span>
+          <span v-if="item.name" class="text-accent">{{ item.name }}</span>
+          <span v-if="item.stars" class="ml-auto">{{ item.stars }} pts</span>
+        </div>
+        <p class="mt-2 text-xs text-text-muted">{{ formatDate(item.collected_at) }}</p>
       </a>
     </div>
 
