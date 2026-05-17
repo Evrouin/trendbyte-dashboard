@@ -1,15 +1,23 @@
 <template>
   <div>
     <h1 class="mb-2 text-3xl font-extrabold">Predictions</h1>
-    <p class="mb-8 text-text-secondary">Technologies showing early signs of trending.</p>
+    <p class="text-text-secondary mb-8">Technologies showing early signs of trending.</p>
 
-    <ErrorState v-else-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
+    <ErrorState
+      v-else-if="error"
+      message="Failed to load predictions"
+      :retry="true"
+      @retry="refresh"
+    />
 
-    <div v-else-if="predictions?.predictions?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      v-else-if="predictions?.predictions?.length"
+      class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+    >
       <div
         v-for="p in predictions.predictions"
         :key="p.name"
-        class="glass-card p-5 flex flex-col justify-between"
+        class="glass-card flex flex-col justify-between p-5"
       >
         <div>
           <div class="mb-3 flex items-center justify-between">
@@ -25,20 +33,15 @@
             <span
               v-for="signal in p.signals"
               :key="signal"
-              class="rounded-md border border-border-subtle bg-surface-hover px-2 py-0.5 text-xs text-text-secondary"
+              class="border-border-subtle bg-surface-hover text-text-secondary rounded-md border px-2 py-0.5 text-xs"
             >
               {{ formatSignal(signal) }}
             </span>
           </div>
         </div>
-        <div class="mt-4 flex items-center justify-between text-xs text-text-muted">
+        <div class="text-text-muted mt-4 flex items-center justify-between text-xs">
           <span>{{ new Date(p.predicted_at).toLocaleDateString() }}</span>
-          <a
-            v-if="p.url"
-            :href="p.url"
-            target="_blank"
-            class="text-accent hover:underline"
-          >
+          <a v-if="p.url" :href="p.url" target="_blank" class="text-accent hover:underline">
             Source
           </a>
         </div>
@@ -46,17 +49,27 @@
     </div>
 
     <div v-else class="glass-card p-8 text-center">
-      <p class="text-text-secondary">No predictions yet. Data accumulates after multiple pipeline runs.</p>
+      <p class="text-text-secondary">
+        No predictions yet. Data accumulates after multiple pipeline runs.
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-useHead({ title: "Predictions — TrendByte" })
-import { formatSignal } from "~/utils/formatSignal"
+useHead({ title: 'Predictions — TrendByte' })
+import { formatSignal } from '~/utils/formatSignal'
 
 const { fetchPredictions } = useApi()
-const { data: predictions, pending, error, refresh } = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 20 }, lazy: true })
+const {
+  data: predictions,
+  pending,
+  error,
+  refresh,
+} = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(
+  `${useRuntimeConfig().public.apiUrl}/api/predictions`,
+  { params: { limit: 20 }, lazy: true },
+)
 
 const confidenceColor = (confidence: number) => {
   if (confidence >= 0.7) return 'bg-success/30 text-success'

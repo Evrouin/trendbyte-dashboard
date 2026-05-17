@@ -3,7 +3,7 @@
     <p class="text-warning font-semibold">{{ message }}</p>
     <button
       v-if="retry"
-      class="mt-3 rounded-lg bg-accent/20 px-4 py-2 text-sm font-medium text-accent transition hover:bg-accent/30"
+      class="bg-accent/20 text-accent hover:bg-accent/30 mt-3 rounded-lg px-4 py-2 text-sm font-medium transition"
       @click="$emit('retry')"
     >
       Try again

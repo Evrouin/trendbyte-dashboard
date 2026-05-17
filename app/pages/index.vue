@@ -2,25 +2,25 @@
   <div>
     <section class="mb-8">
       <h1 class="text-3xl font-extrabold">Dashboard</h1>
-      <p class="mt-1 text-text-secondary">Tech trend intelligence overview</p>
+      <p class="text-text-secondary mt-1">Tech trend intelligence overview</p>
     </section>
 
     <section v-else-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
-        <p class="mt-1 text-sm text-text-secondary">Mentions</p>
+        <p class="text-text-secondary mt-1 text-sm">Mentions</p>
       </div>
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_trends }}</p>
-        <p class="mt-1 text-sm text-text-secondary">Trends</p>
+        <p class="text-text-secondary mt-1 text-sm">Trends</p>
       </div>
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_predictions }}</p>
-        <p class="mt-1 text-sm text-text-secondary">Predictions</p>
+        <p class="text-text-secondary mt-1 text-sm">Predictions</p>
       </div>
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.active_sources.length }}</p>
-        <p class="mt-1 text-sm text-text-secondary">Sources</p>
+        <p class="text-text-secondary mt-1 text-sm">Sources</p>
       </div>
     </section>
 
@@ -36,54 +36,58 @@
       </div>
     </section>
 
-    <ErrorState v-else-if="trendsError" message="Failed to load trends" :retry="true" @retry="refreshTrends" />
-    <section v-else-if="trends?.trends" class="mb-10">
-      </section>
+    <ErrorState
+      v-else-if="trendsError"
+      message="Failed to load trends"
+      :retry="true"
+      @retry="refreshTrends"
+    />
+    <section v-else-if="trends?.trends" class="mb-10"></section>
 
-      <section class="mb-10">
-        <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
-        <div class="glass-card overflow-hidden">
-          <table class="w-full text-left text-sm">
-            <thead class="border-b border-border text-text-secondary">
-              <tr>
-                <th class="px-5 py-3 font-semibold">#</th>
-                <th class="px-5 py-3 font-semibold">Name</th>
-                <th class="px-5 py-3 font-semibold">Score</th>
-                <th class="px-5 py-3 font-semibold">Growth</th>
-                <th class="px-5 py-3 font-semibold">Sources</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(trend, i) in trends.trends"
-                :key="trend.name"
-                class="border-b border-border-subtle last:border-0 transition hover:bg-surface-hover"
-              >
-                <td class="px-5 py-3 text-text-secondary">{{ i + 1 }}</td>
-                <td class="px-5 py-3 font-bold">
-                  <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
-                    {{ trend.name }}
-                  </NuxtLink>
-                </td>
-                <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
-                <td class="px-5 py-3">
-                  <span
-                    class="rounded-full px-2 py-0.5 text-xs font-semibold"
-                    :class="
-                      trend.growth_pct >= 0
-                        ? 'bg-success/20 text-success'
-                        : 'bg-warning/20 text-warning'
-                    "
-                  >
-                    {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
-                  </span>
-                </td>
-                <td class="px-5 py-3 text-text-secondary">{{ trend.sources.join(', ') }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+    <section class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
+      <div class="glass-card overflow-hidden">
+        <table class="w-full text-left text-sm">
+          <thead class="border-border text-text-secondary border-b">
+            <tr>
+              <th class="px-5 py-3 font-semibold">#</th>
+              <th class="px-5 py-3 font-semibold">Name</th>
+              <th class="px-5 py-3 font-semibold">Score</th>
+              <th class="px-5 py-3 font-semibold">Growth</th>
+              <th class="px-5 py-3 font-semibold">Sources</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(trend, i) in trends.trends"
+              :key="trend.name"
+              class="border-border-subtle hover:bg-surface-hover border-b transition last:border-0"
+            >
+              <td class="text-text-secondary px-5 py-3">{{ i + 1 }}</td>
+              <td class="px-5 py-3 font-bold">
+                <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
+                  {{ trend.name }}
+                </NuxtLink>
+              </td>
+              <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
+              <td class="px-5 py-3">
+                <span
+                  class="rounded-full px-2 py-0.5 text-xs font-semibold"
+                  :class="
+                    trend.growth_pct >= 0
+                      ? 'bg-success/20 text-success'
+                      : 'bg-warning/20 text-warning'
+                  "
+                >
+                  {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
+                </span>
+              </td>
+              <td class="text-text-secondary px-5 py-3">{{ trend.sources.join(', ') }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
     <section v-else-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
@@ -94,10 +98,10 @@
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
           <span class="font-bold">{{ p.name }}</span>
-          <span class="rounded-full bg-success/30 px-2.5 py-0.5 text-xs font-semibold text-success">
+          <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
-          <span class="text-xs text-text-muted">{{ p.signals.map(formatSignal).join(', ') }}</span>
+          <span class="text-text-muted text-xs">{{ p.signals.map(formatSignal).join(', ') }}</span>
         </div>
       </div>
     </section>
@@ -105,25 +109,37 @@
 </template>
 
 <script setup lang="ts">
-import { formatSignal } from "~/utils/formatSignal"
-useHead({ title: "Overview — TrendByte" })
+import { formatSignal } from '~/utils/formatSignal'
+useHead({ title: 'Overview — TrendByte' })
 
 const { fetchStats, fetchTrends, fetchPredictions } = useApi()
 
-const { data: stats, pending: statsPending } = useFetch<import('~/types').Stats>(`${useRuntimeConfig().public.apiUrl}/api/stats`, { lazy: true })
+const { data: stats, pending: statsPending } = useFetch<import('~/types').Stats>(
+  `${useRuntimeConfig().public.apiUrl}/api/stats`,
+  { lazy: true },
+)
 const {
   data: trends,
   pending: trendsPending,
   error: trendsError,
   refresh: refreshTrends,
-} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/trends`, { params: { days: 7, limit: 10 }, lazy: true })
-const { data: predictions, pending: predPending } = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
+} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(
+  `${useRuntimeConfig().public.apiUrl}/api/trends`,
+  { params: { days: 7, limit: 10 }, lazy: true },
+)
+const { data: predictions, pending: predPending } = useFetch<{
+  predictions: import('~/types').Prediction[]
+  count: number
+}>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
 
 // Auto-refresh every 5 minutes
 onMounted(() => {
-  const interval = setInterval(() => {
-    refreshTrends()
-  }, 5 * 60 * 1000)
+  const interval = setInterval(
+    () => {
+      refreshTrends()
+    },
+    5 * 60 * 1000,
+  )
 
   onUnmounted(() => clearInterval(interval))
 })

@@ -18,7 +18,10 @@ export const useApi = () => {
 
   const fetchTrendsByCategory = (params?: { days?: number; limit?: number }) => {
     return useFetch<{
-      categories: { category: string; trends: { name: string; mentions: number; score: number }[] }[]
+      categories: {
+        category: string
+        trends: { name: string; mentions: number; score: number }[]
+      }[]
     }>(`${baseUrl}/api/trends/by-category`, { params })
   }
 
@@ -35,7 +38,14 @@ export const useApi = () => {
 
   const fetchNews = (params?: { source?: string; limit?: number }) => {
     return useFetch<{
-      news: { source: string; name: string; url: string; description: string; stars: number; collected_at: string }[]
+      news: {
+        source: string
+        name: string
+        url: string
+        description: string
+        stars: number
+        collected_at: string
+      }[]
       count: number
     }>(`${baseUrl}/api/news`, { params })
   }

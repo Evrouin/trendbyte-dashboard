@@ -7,11 +7,11 @@
         v-model="search"
         type="text"
         placeholder="Search trends..."
-        class="rounded-lg border border-border bg-surface px-4 py-2 text-sm text-text placeholder-text-muted outline-none focus:border-accent w-full md:w-64"
+        class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-64"
       />
       <select
         v-model="selectedDays"
-        class="rounded-lg border border-border bg-surface px-4 py-2 text-sm text-text outline-none focus:border-accent"
+        class="border-border bg-surface text-text focus:border-accent rounded-lg border px-4 py-2 text-sm outline-none"
         @change="refresh()"
       >
         <option :value="7">Last 7 days</option>
@@ -24,7 +24,7 @@
 
     <div v-else-if="filteredTrends.length" class="glass-card overflow-hidden">
       <table class="w-full text-left text-sm">
-        <thead class="border-b border-border text-text-secondary">
+        <thead class="border-border text-text-secondary border-b">
           <tr>
             <th class="px-5 py-3 font-semibold">#</th>
             <th class="px-5 py-3 font-semibold">Name</th>
@@ -38,9 +38,9 @@
           <tr
             v-for="(trend, i) in filteredTrends"
             :key="trend.name"
-            class="border-b border-border-subtle last:border-0 transition hover:bg-surface-hover"
+            class="border-border-subtle hover:bg-surface-hover border-b transition last:border-0"
           >
-            <td class="px-5 py-3 text-text-secondary">{{ i + 1 }}</td>
+            <td class="text-text-secondary px-5 py-3">{{ i + 1 }}</td>
             <td class="px-5 py-3 font-bold">
               <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
                 {{ trend.name }}
@@ -60,7 +60,7 @@
                 {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
               </span>
             </td>
-            <td class="px-5 py-3 text-text-secondary">{{ trend.sources.join(', ') }}</td>
+            <td class="text-text-secondary px-5 py-3">{{ trend.sources.join(', ') }}</td>
           </tr>
         </tbody>
       </table>
@@ -73,14 +73,22 @@
 </template>
 
 <script setup lang="ts">
-useHead({ title: "Trends — TrendByte" })
+useHead({ title: 'Trends — TrendByte' })
 
 const { fetchTrends } = useApi()
 
-const search = ref("")
+const search = ref('')
 const selectedDays = ref(7)
 
-const { data: trends, pending, error, refresh } = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/trends`, { params: { days: selectedDays.value, limit: 30 }, lazy: true })
+const {
+  data: trends,
+  pending,
+  error,
+  refresh,
+} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(
+  `${useRuntimeConfig().public.apiUrl}/api/trends`,
+  { params: { days: selectedDays.value, limit: 30 }, lazy: true },
+)
 
 const filteredTrends = computed(() => {
   if (!trends.value?.trends) return []
