@@ -7,10 +7,10 @@
         </NuxtLink>
         <div class="flex gap-6 text-sm text-text-secondary">
           <NuxtLink to="/" class="transition hover:text-text">Overview</NuxtLink>
+          <NuxtLink to="/news" class="transition hover:text-text">News</NuxtLink>
           <NuxtLink to="/trends" class="transition hover:text-text">Trends</NuxtLink>
           <NuxtLink to="/predictions" class="transition hover:text-text">Predictions</NuxtLink>
           <NuxtLink to="/categories" class="transition hover:text-text">Categories</NuxtLink>
-          <NuxtLink to="/news" class="transition hover:text-text">News</NuxtLink>
         </div>
       </div>
     </nav>
