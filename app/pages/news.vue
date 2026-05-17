@@ -19,7 +19,7 @@
       </button>
     </div>
 
-    <ErrorState v-else-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
+    <ErrorState v-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
 
     <div
       v-else-if="news?.news?.length"

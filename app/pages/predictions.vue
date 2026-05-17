@@ -4,7 +4,7 @@
     <p class="text-text-secondary mb-8">Technologies showing early signs of trending.</p>
 
     <ErrorState
-      v-else-if="error"
+      v-if="error"
       message="Failed to load predictions"
       :retry="true"
       @retry="refresh"

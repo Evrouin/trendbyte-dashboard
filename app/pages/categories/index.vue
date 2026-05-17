@@ -3,7 +3,7 @@
     <h1 class="mb-6 text-3xl font-extrabold">Categories</h1>
 
     <ErrorState
-      v-else-if="error"
+      v-if="error"
       message="Failed to load categories"
       :retry="true"
       @retry="refresh"

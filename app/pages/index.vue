@@ -5,7 +5,7 @@
       <p class="text-text-secondary mt-1">Tech trend intelligence overview</p>
     </section>
 
-    <section v-else-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
         <p class="text-text-secondary mt-1 text-sm">Mentions</p>
@@ -24,7 +24,7 @@
       </div>
     </section>
 
-    <section v-else-if="trends?.trends" class="mb-10">
+    <section v-if="trends?.trends" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
       <div class="glass-card p-6" style="height: 300px">
         <ClientOnly>
@@ -37,14 +37,13 @@
     </section>
 
     <ErrorState
-      v-else-if="trendsError"
+      v-if="trendsError"
       message="Failed to load trends"
       :retry="true"
       @retry="refreshTrends"
     />
-    <section v-else-if="trends?.trends" class="mb-10"></section>
 
-    <section class="mb-10">
+    <section v-if="trends?.trends" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
       <div class="glass-card overflow-hidden">
         <table class="w-full text-left text-sm">
@@ -89,7 +88,7 @@
       </div>
     </section>
 
-    <section v-else-if="predictions?.predictions?.length">
+    <section v-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">
         <div
@@ -98,10 +97,14 @@
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
           <span class="font-bold">{{ p.name }}</span>
-          <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
+          <span
+            class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold"
+          >
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
-          <span class="text-text-muted text-xs">{{ p.signals.map(formatSignal).join(', ') }}</span>
+          <span class="text-text-muted text-xs">{{
+            p.signals.map(formatSignal).join(', ')
+          }}</span>
         </div>
       </div>
     </section>
@@ -112,35 +115,27 @@
 import { formatSignal } from '~/utils/formatSignal'
 useHead({ title: 'Overview — TrendByte' })
 
-const { fetchStats, fetchTrends, fetchPredictions } = useApi()
+const config = useRuntimeConfig()
+const baseUrl = config.public.apiUrl
 
-const { data: stats, pending: statsPending } = useFetch<import('~/types').Stats>(
-  `${useRuntimeConfig().public.apiUrl}/api/stats`,
-  { lazy: true },
-)
+const { data: stats } = useFetch<import('~/types').Stats>(`${baseUrl}/api/stats`, { lazy: true })
 const {
   data: trends,
-  pending: trendsPending,
   error: trendsError,
   refresh: refreshTrends,
-} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(
-  `${useRuntimeConfig().public.apiUrl}/api/trends`,
-  { params: { days: 7, limit: 10 }, lazy: true },
-)
-const { data: predictions, pending: predPending } = useFetch<{
+} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${baseUrl}/api/trends`, {
+  params: { days: 7, limit: 10 },
+  lazy: true,
+})
+const { data: predictions } = useFetch<{
   predictions: import('~/types').Prediction[]
   count: number
-}>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
+}>(`${baseUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
 
-// Auto-refresh every 5 minutes
 onMounted(() => {
-  const interval = setInterval(
-    () => {
-      refreshTrends()
-    },
-    5 * 60 * 1000,
-  )
-
+  const interval = setInterval(() => {
+    refreshTrends()
+  }, 5 * 60 * 1000)
   onUnmounted(() => clearInterval(interval))
 })
 </script>
