@@ -1,31 +1,43 @@
 <template>
   <div>
     <section class="mb-8">
-      <h1 class="text-3xl font-extrabold text-text">Dashboard</h1>
+      <h1 class="text-3xl font-extrabold">Dashboard</h1>
       <p class="mt-1 text-text-secondary">Tech trend intelligence overview</p>
     </section>
 
     <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
-        <p class="text-3xl font-extrabold text-text">{{ stats.total_mentions.toLocaleString() }}</p>
+        <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
         <p class="mt-1 text-sm text-text-secondary">Mentions</p>
       </div>
       <div class="glass-card p-6">
-        <p class="text-3xl font-extrabold text-text">{{ stats.total_trends }}</p>
+        <p class="text-3xl font-extrabold">{{ stats.total_trends }}</p>
         <p class="mt-1 text-sm text-text-secondary">Trends</p>
       </div>
       <div class="glass-card p-6">
-        <p class="text-3xl font-extrabold text-text">{{ stats.total_predictions }}</p>
+        <p class="text-3xl font-extrabold">{{ stats.total_predictions }}</p>
         <p class="mt-1 text-sm text-text-secondary">Predictions</p>
       </div>
       <div class="glass-card p-6">
-        <p class="text-3xl font-extrabold text-text">{{ stats.active_sources.length }}</p>
+        <p class="text-3xl font-extrabold">{{ stats.active_sources.length }}</p>
         <p class="mt-1 text-sm text-text-secondary">Sources</p>
       </div>
     </section>
 
     <section v-if="trends?.trends" class="mb-10">
-      <h2 class="mb-4 text-xl font-bold text-text">Top Trends</h2>
+      <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
+      <div class="glass-card p-6" style="height: 300px">
+        <ClientOnly>
+          <BarChart
+            :labels="trends.trends.map((t) => t.name)"
+            :values="trends.trends.map((t) => Math.round(t.score))"
+          />
+        </ClientOnly>
+      </div>
+    </section>
+
+    <section v-if="trends?.trends" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
       <div class="glass-card overflow-hidden">
         <table class="w-full text-left text-sm">
           <thead class="border-b border-border text-text-secondary">
@@ -44,12 +56,12 @@
               class="border-b border-border-subtle last:border-0 transition hover:bg-surface-hover"
             >
               <td class="px-5 py-3 text-text-secondary">{{ i + 1 }}</td>
-              <td class="px-5 py-3 font-bold text-text">
+              <td class="px-5 py-3 font-bold">
                 <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
                   {{ trend.name }}
                 </NuxtLink>
               </td>
-              <td class="px-5 py-3 text-text">{{ Math.round(trend.score).toLocaleString() }}</td>
+              <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
               <td class="px-5 py-3">
                 <span
                   class="rounded-full px-2 py-0.5 text-xs font-semibold"
@@ -70,10 +82,14 @@
     </section>
 
     <section v-if="predictions?.predictions?.length">
-      <h2 class="mb-4 text-xl font-bold text-text">Rising Stars</h2>
+      <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">
-        <div v-for="p in predictions.predictions" :key="p.name" class="glass-card-inner flex items-center gap-4">
-          <span class="font-bold text-text">{{ p.name }}</span>
+        <div
+          v-for="p in predictions.predictions"
+          :key="p.name"
+          class="glass-card flex items-center gap-4 px-5 py-4"
+        >
+          <span class="font-bold">{{ p.name }}</span>
           <span class="rounded-full bg-success/30 px-2.5 py-0.5 text-xs font-semibold text-success">
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
