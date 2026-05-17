@@ -119,9 +119,11 @@ const {
 const { data: predictions, pending: predPending } = await fetchPredictions({ limit: 5 })
 
 // Auto-refresh every 5 minutes
-const refreshInterval = setInterval(() => {
-  refreshTrends()
-}, 5 * 60 * 1000)
+onMounted(() => {
+  const interval = setInterval(() => {
+    refreshTrends()
+  }, 5 * 60 * 1000)
 
-onUnmounted(() => clearInterval(refreshInterval))
+  onUnmounted(() => clearInterval(interval))
+})
 </script>
