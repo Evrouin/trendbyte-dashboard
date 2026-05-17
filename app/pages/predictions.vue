@@ -3,7 +3,6 @@
     <h1 class="mb-2 text-3xl font-extrabold">Predictions</h1>
     <p class="mb-8 text-text-secondary">Technologies showing early signs of trending.</p>
 
-    <SkeletonLoader v-if="pending" variant="grid" />
     <ErrorState v-else-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
     <div v-else-if="predictions?.predictions?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -57,7 +56,7 @@ useHead({ title: "Predictions — TrendByte" })
 import { formatSignal } from "~/utils/formatSignal"
 
 const { fetchPredictions } = useApi()
-const { data: predictions, pending, error, refresh } = await fetchPredictions({ limit: 20 })
+const { data: predictions, pending, error, refresh } = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 20 }, lazy: true })
 
 const confidenceColor = (confidence: number) => {
   if (confidence >= 0.7) return 'bg-success/30 text-success'

@@ -5,7 +5,6 @@
       <p class="mt-1 text-text-secondary">Tech trend intelligence overview</p>
     </section>
 
-    <SkeletonLoader v-if="statsPending" variant="cards" />
     <section v-else-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="glass-card p-6">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
@@ -25,19 +24,20 @@
       </div>
     </section>
 
-    <SkeletonLoader v-if="trendsPending" variant="table" />
+    <section v-else-if="trends?.trends" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
+      <div class="glass-card p-6" style="height: 300px">
+        <ClientOnly>
+          <BarChart
+            :labels="trends.trends.map((t) => t.name)"
+            :values="trends.trends.map((t) => Math.round(t.score))"
+          />
+        </ClientOnly>
+      </div>
+    </section>
+
     <ErrorState v-else-if="trendsError" message="Failed to load trends" :retry="true" @retry="refreshTrends" />
-    <template v-else-if="trends?.trends">
-      <section class="mb-10">
-        <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
-        <div class="glass-card p-6" style="height: 300px">
-          <ClientOnly>
-            <BarChart
-              :labels="trends.trends.map((t) => t.name)"
-              :values="trends.trends.map((t) => Math.round(t.score))"
-            />
-          </ClientOnly>
-        </div>
+    <section v-else-if="trends?.trends" class="mb-10">
       </section>
 
       <section class="mb-10">
@@ -84,9 +84,7 @@
           </table>
         </div>
       </section>
-    </template>
 
-    <SkeletonLoader v-if="predPending" variant="grid" />
     <section v-else-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">
@@ -112,14 +110,14 @@ useHead({ title: "Overview — TrendByte" })
 
 const { fetchStats, fetchTrends, fetchPredictions } = useApi()
 
-const { data: stats, pending: statsPending } = await fetchStats()
+const { data: stats, pending: statsPending } = useFetch<import('~/types').Stats>(`${useRuntimeConfig().public.apiUrl}/api/stats`, { lazy: true })
 const {
   data: trends,
   pending: trendsPending,
   error: trendsError,
   refresh: refreshTrends,
-} = await fetchTrends({ days: 7, limit: 10 })
-const { data: predictions, pending: predPending } = await fetchPredictions({ limit: 5 })
+} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/trends`, { params: { days: 7, limit: 10 }, lazy: true })
+const { data: predictions, pending: predPending } = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
 
 // Auto-refresh every 5 minutes
 onMounted(() => {

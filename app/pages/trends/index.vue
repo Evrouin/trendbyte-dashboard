@@ -20,7 +20,6 @@
       </select>
     </div>
 
-    <SkeletonLoader v-if="pending" variant="table" />
     <ErrorState v-else-if="error" message="Failed to load trends" :retry="true" @retry="refresh" />
 
     <div v-else-if="filteredTrends.length" class="glass-card overflow-hidden">
@@ -81,7 +80,7 @@ const { fetchTrends } = useApi()
 const search = ref("")
 const selectedDays = ref(7)
 
-const { data: trends, pending, error, refresh } = await fetchTrends({ days: selectedDays.value, limit: 30 })
+const { data: trends, pending, error, refresh } = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${useRuntimeConfig().public.apiUrl}/api/trends`, { params: { days: selectedDays.value, limit: 30 }, lazy: true })
 
 const filteredTrends = computed(() => {
   if (!trends.value?.trends) return []

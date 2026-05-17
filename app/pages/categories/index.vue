@@ -2,7 +2,6 @@
   <div>
     <h1 class="mb-6 text-3xl font-extrabold">Categories</h1>
 
-    <SkeletonLoader v-if="pending" variant="grid" />
     <ErrorState v-else-if="error" message="Failed to load categories" :retry="true" @retry="refresh" />
 
     <div v-else-if="data?.categories" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -50,7 +49,9 @@
 <script setup lang="ts">
 useHead({ title: "Categories — TrendByte" })
 const { fetchTrendsByCategory } = useApi()
-const { data, pending, error, refresh } = await fetchTrendsByCategory({ days: 7, limit: 5 })
+const { data, pending, error, refresh } = useFetch<{
+  categories: { category: string; trends: { name: string; mentions: number; score: number }[] }[]
+}>(`${useRuntimeConfig().public.apiUrl}/api/trends/by-category`, { params: { days: 7, limit: 5 }, lazy: true })
 
 const categoryColor = (cat: string) => {
   const colors: Record<string, string> = {

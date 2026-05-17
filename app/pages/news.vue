@@ -19,7 +19,6 @@
       </button>
     </div>
 
-    <SkeletonLoader v-if="pending" variant="grid" />
     <ErrorState v-else-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
 
     <div v-else-if="news?.news?.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -53,7 +52,10 @@ useHead({ title: "News — TrendByte" })
 const { fetchNews } = useApi()
 
 const activeSource = ref('all')
-const { data: news, pending, error, refresh } = await fetchNews({ limit: 30 })
+const { data: news, pending, error, refresh } = useFetch<{
+  news: { source: string; name: string; url: string; description: string; stars: number; collected_at: string }[]
+  count: number
+}>(`${useRuntimeConfig().public.apiUrl}/api/news`, { params: { limit: 30 }, lazy: true })
 
 const filterBySource = async (source: string) => {
   activeSource.value = source
