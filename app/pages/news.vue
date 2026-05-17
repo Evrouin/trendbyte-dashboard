@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: "News — TrendByte" })
 const { fetchNews } = useApi()
 
 const activeSource = ref('all')

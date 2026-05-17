@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: "Categories — TrendByte" })
 const { fetchTrendsByCategory } = useApi()
 const { data, pending, error, refresh } = await fetchTrendsByCategory({ days: 7, limit: 5 })
 

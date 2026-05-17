@@ -53,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+useHead({ title: "Predictions — TrendByte" })
 import { formatSignal } from "~/utils/formatSignal"
 
 const { fetchPredictions } = useApi()
