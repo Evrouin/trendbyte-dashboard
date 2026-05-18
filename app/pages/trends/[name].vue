@@ -62,6 +62,23 @@
         </a>
       </div>
     </section>
+
+    <section v-if="data.related?.length" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Related Trends</h2>
+      <div class="flex flex-wrap gap-2">
+        <NuxtLink
+          v-for="r in data.related"
+          :key="r.name"
+          :to="`/trends/${r.name}`"
+          class="glass-card hover:bg-surface-hover px-4 py-2 text-sm transition"
+        >
+          <span class="text-accent font-medium">{{ r.name }}</span>
+          <span class="text-text-muted ml-2 text-xs">{{
+            Math.round(r.score).toLocaleString()
+          }}</span>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
