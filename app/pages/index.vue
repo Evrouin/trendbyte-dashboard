@@ -140,7 +140,9 @@
           :key="p.name"
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
-          <span class="font-bold">{{ p.name }}</span>
+          <NuxtLink :to="`/trends/${p.name}`" class="text-accent font-bold hover:underline">
+            {{ p.name }}
+          </NuxtLink>
           <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
