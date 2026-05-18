@@ -11,19 +11,35 @@
     </section>
 
     <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-      <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
+      <NuxtLink
+        to="/news"
+        class="glass-card tooltip hover:bg-surface-hover p-6 transition"
+        data-tooltip="Total collected data points"
+      >
         <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_mentions" /></p>
         <p class="text-text-secondary mt-1 text-sm">Mentions</p>
       </NuxtLink>
-      <NuxtLink to="/trends" class="glass-card hover:bg-surface-hover p-6 transition">
+      <NuxtLink
+        to="/trends"
+        class="glass-card tooltip hover:bg-surface-hover p-6 transition"
+        data-tooltip="Unique technologies tracked"
+      >
         <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_trends" /></p>
         <p class="text-text-secondary mt-1 text-sm">Trends</p>
       </NuxtLink>
-      <NuxtLink to="/predictions" class="glass-card hover:bg-surface-hover p-6 transition">
+      <NuxtLink
+        to="/predictions"
+        class="glass-card tooltip hover:bg-surface-hover p-6 transition"
+        data-tooltip="ML rising star predictions"
+      >
         <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_predictions" /></p>
         <p class="text-text-secondary mt-1 text-sm">Predictions</p>
       </NuxtLink>
-      <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
+      <NuxtLink
+        to="/news"
+        class="glass-card tooltip hover:bg-surface-hover p-6 transition"
+        data-tooltip="Total collected data points"
+      >
         <p class="text-3xl font-extrabold">
           <AnimatedCounter :value="stats.active_sources.length" />
         </p>
