@@ -31,6 +31,7 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
+    legend: { display: false },
     title: {
       display: !!props.title,
       text: props.title,
