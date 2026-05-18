@@ -42,7 +42,7 @@
           </svg>
         </button>
 
-        <div class="hidden gap-6 text-sm md:flex">
+        <div class="hidden items-center gap-6 text-sm md:flex">
           <NuxtLink
             v-for="link in navLinks"
             :key="link.to"
@@ -57,7 +57,7 @@
             {{ link.label }}
           </NuxtLink>
           <button
-            class="border-border text-text-secondary hover:border-accent hover:text-accent rounded-lg border p-1.5 transition"
+            class="text-text-secondary hover:text-accent transition"
             title="Toggle theme"
             @click="toggleTheme"
           >

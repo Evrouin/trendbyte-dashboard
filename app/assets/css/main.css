@@ -73,3 +73,11 @@ html {
   border: 1px solid var(--color-border-subtle);
   border-radius: 12px;
 }
+
+a.glass-card,
+button,
+[role='button'],
+select,
+canvas {
+  cursor: pointer;
+}
