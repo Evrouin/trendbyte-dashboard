@@ -3,6 +3,15 @@
     <h1 class="mb-2 text-3xl font-extrabold">Latest News</h1>
     <p class="text-text-secondary mb-6">Recent posts and articles from developer communities.</p>
 
+    <div class="mb-4">
+      <input
+        v-model="search"
+        type="text"
+        placeholder="Search by name, source, keyword..."
+        class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
+      />
+    </div>
+
     <div class="mb-6 flex flex-wrap gap-2">
       <button
         v-for="s in sources"
@@ -26,7 +35,7 @@
       class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <a
-        v-for="item in news.news"
+        v-for="item in filteredNews"
         :key="item.url + item.collected_at"
         :href="item.url"
         target="_blank"
@@ -55,6 +64,7 @@ useHead({ title: 'News — TrendByte' })
 const { fetchNews } = useApi()
 
 const activeSource = ref('all')
+const search = ref('')
 const { data: stats } = useFetch<{ active_sources: string[] }>(
   `${useRuntimeConfig().public.apiUrl}/api/stats`,
   { lazy: true },
@@ -75,7 +85,19 @@ const {
     collected_at: string
   }[]
   count: number
-}>(`${useRuntimeConfig().public.apiUrl}/api/news`, { params: { limit: 30 }, lazy: true })
+}>(`${useRuntimeConfig().public.apiUrl}/api/news`, { params: { limit: 50 }, lazy: true })
+
+const filteredNews = computed(() => {
+  if (!news.value?.news) return []
+  const q = search.value.toLowerCase()
+  if (!q) return news.value.news
+  return news.value.news.filter(
+    (item) =>
+      item.name?.toLowerCase().includes(q) ||
+      item.source.toLowerCase().includes(q) ||
+      item.description?.toLowerCase().includes(q),
+  )
+})
 
 const filterBySource = async (source: string) => {
   activeSource.value = source
