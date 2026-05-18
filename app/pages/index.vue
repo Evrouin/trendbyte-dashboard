@@ -53,7 +53,7 @@
     <section v-if="trends?.trends" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
       <div class="glass-card overflow-hidden">
-        <table class="w-full text-left text-sm">
+        <table class="hidden w-full text-left text-sm md:table">
           <thead class="border-border text-text-secondary border-b">
             <tr>
               <th class="px-5 py-3 font-semibold">#</th>
@@ -94,6 +94,36 @@
             </tr>
           </tbody>
         </table>
+
+        <div class="grid gap-3 p-4 md:hidden">
+          <NuxtLink
+            v-for="(trend, i) in trends.trends.slice(0, 5)"
+            :key="trend.name"
+            :to="`/trends/${trend.name}`"
+            class="glass-card flex items-center justify-between p-4"
+          >
+            <div>
+              <p class="text-accent font-bold">{{ i + 1 }}. {{ trend.name }}</p>
+              <p class="text-text-secondary text-xs">
+                {{ trend.mentions }} mentions · {{ trend.sources.join(', ') }}
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold">{{ Math.round(trend.score).toLocaleString() }}</p>
+              <span
+                class="rounded-full px-2 py-0.5 text-xs font-semibold"
+                :class="
+                  trend.growth_pct >= 0
+                    ? 'bg-success/20 text-success'
+                    : 'bg-warning/20 text-warning'
+                "
+              >
+                {{ trend.growth_pct >= 0 ? '+' : '' }}{{ trend.growth_pct.toFixed(1) }}%
+              </span>
+            </div>
+          </NuxtLink>
+        </div>
+
         <div class="border-border border-t px-5 py-3 text-center">
           <NuxtLink to="/trends" class="text-accent text-sm font-medium hover:underline">
             See all trends →
