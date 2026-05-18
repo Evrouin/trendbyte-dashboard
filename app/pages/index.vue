@@ -171,6 +171,8 @@
 
 <script setup lang="ts">
 import { formatSignal } from '~/utils/formatSignal'
+import { useTrendsStore } from '~/stores/trends'
+
 useHead({ title: 'Overview — TrendByte' })
 
 const formatRelative = (date: string) => {
@@ -182,33 +184,27 @@ const formatRelative = (date: string) => {
   return `${Math.floor(hours / 24)}d ago`
 }
 
-const config = useRuntimeConfig()
-const baseUrl = config.public.apiUrl
+const store = useTrendsStore()
+await store.fetchStats()
+await store.fetchTrends(7, 10)
+await store.fetchPredictions(5)
 
-const { data: stats } = useFetch<import('~/types').Stats>(`${baseUrl}/api/stats`, { lazy: true })
-const {
-  data: trends,
-  error: trendsError,
-  refresh: refreshTrends,
-} = useFetch<{ trends: import('~/types').Trend[]; count: number }>(`${baseUrl}/api/trends`, {
-  params: { days: 7, limit: 10 },
-  lazy: true,
-})
-const { data: predictions } = useFetch<{
-  predictions: import('~/types').Prediction[]
-  count: number
-}>(`${baseUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
+const stats = computed(() => store.stats)
+const trends = computed(() => ({ trends: store.trends }))
+const predictions = computed(() => ({ predictions: store.predictions }))
+const trendsError = ref(false)
 
 const { show: showToast } = useToast()
 
+const refreshTrends = async () => {
+  store.invalidate()
+  await store.fetchTrends(7, 10)
+  await store.fetchStats()
+  showToast('Data refreshed')
+}
+
 onMounted(() => {
-  const interval = setInterval(
-    () => {
-      refreshTrends()
-      showToast('Data refreshed')
-    },
-    5 * 60 * 1000,
-  )
+  const interval = setInterval(() => refreshTrends(), 5 * 60 * 1000)
   onUnmounted(() => clearInterval(interval))
 })
 </script>

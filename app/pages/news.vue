@@ -69,35 +69,28 @@
 useHead({ title: 'News — TrendByte' })
 const { fetchNews } = useApi()
 
+import { useTrendsStore } from '~/stores/trends'
+
+const store = useTrendsStore()
+await store.fetchStats()
+await store.fetchNews()
+
 const activeSource = ref('all')
 const search = ref('')
-const { data: stats } = useFetch<{ active_sources: string[] }>(
-  `${useRuntimeConfig().public.apiUrl}/api/stats`,
-  { lazy: true },
-)
-const sources = computed(() => ['all', ...(stats.value?.active_sources || []).sort()])
-const {
-  data: news,
-  pending,
-  error,
-  refresh,
-} = useFetch<{
-  news: {
-    source: string
-    name: string
-    url: string
-    description: string
-    stars: number
-    collected_at: string
-  }[]
-  count: number
-}>(`${useRuntimeConfig().public.apiUrl}/api/news`, { params: { limit: 50 }, lazy: true })
+const sources = computed(() => ['all', ...(store.stats?.active_sources || []).sort()])
+const news = computed(() => ({ news: store.news }))
+const pending = ref(false)
+const error = ref(false)
+const refresh = async () => {
+  store.invalidate()
+  await store.fetchNews()
+}
 
 const filteredNews = computed(() => {
-  if (!news.value?.news) return []
+  if (!store.news.length) return []
   const q = search.value.toLowerCase()
-  if (!q) return news.value.news
-  return news.value.news.filter(
+  if (!q) return store.news
+  return store.news.filter(
     (item) =>
       item.name?.toLowerCase().includes(q) ||
       item.source.toLowerCase().includes(q) ||
