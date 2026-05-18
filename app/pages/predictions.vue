@@ -3,12 +3,7 @@
     <h1 class="mb-2 text-3xl font-extrabold">Predictions</h1>
     <p class="text-text-secondary mb-8">Technologies showing early signs of trending.</p>
 
-    <ErrorState
-      v-if="error"
-      message="Failed to load predictions"
-      :retry="true"
-      @retry="refresh"
-    />
+    <ErrorState v-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
     <div
       v-else-if="predictions?.predictions?.length"

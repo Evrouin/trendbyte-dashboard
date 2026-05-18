@@ -97,14 +97,10 @@
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
           <span class="font-bold">{{ p.name }}</span>
-          <span
-            class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold"
-          >
+          <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
-          <span class="text-text-muted text-xs">{{
-            p.signals.map(formatSignal).join(', ')
-          }}</span>
+          <span class="text-text-muted text-xs">{{ p.signals.map(formatSignal).join(', ') }}</span>
         </div>
       </div>
     </section>
@@ -133,9 +129,12 @@ const { data: predictions } = useFetch<{
 }>(`${baseUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
 
 onMounted(() => {
-  const interval = setInterval(() => {
-    refreshTrends()
-  }, 5 * 60 * 1000)
+  const interval = setInterval(
+    () => {
+      refreshTrends()
+    },
+    5 * 60 * 1000,
+  )
   onUnmounted(() => clearInterval(interval))
 })
 </script>

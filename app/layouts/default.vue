@@ -2,8 +2,16 @@
   <div class="flex min-h-screen flex-col">
     <nav class="border-border border-b px-6 py-4">
       <div class="mx-auto flex max-w-7xl items-center justify-between">
-        <NuxtLink to="/" class="text-accent flex items-center gap-1.5 text-xl font-bold tracking-widest uppercase">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+        <NuxtLink
+          to="/"
+          class="text-accent flex items-center gap-1.5 text-xl font-bold tracking-widest uppercase"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
             <path d="M13 2L3 14h9l-1 10 10-12h-9l1-10z" />
           </svg>
           TrendByte

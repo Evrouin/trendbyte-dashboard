@@ -2,12 +2,7 @@
   <div>
     <h1 class="mb-6 text-3xl font-extrabold">Categories</h1>
 
-    <ErrorState
-      v-if="error"
-      message="Failed to load categories"
-      :retry="true"
-      @retry="refresh"
-    />
+    <ErrorState v-if="error" message="Failed to load categories" :retry="true" @retry="refresh" />
 
     <div v-else-if="data?.categories" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="cat in data.categories" :key="cat.category" class="glass-card p-6">

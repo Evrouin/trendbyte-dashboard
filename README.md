@@ -8,14 +8,14 @@ Frontend for [TrendByte](https://github.com/Evrouin/trendbyte) — a tech trend 
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Overview — stats, trend chart, top trends, rising stars |
-| `/news` | Latest posts from all sources with source filter |
-| `/trends` | Full trend list with search and date range filter |
+| Route           | Description                                             |
+| --------------- | ------------------------------------------------------- |
+| `/`             | Overview — stats, trend chart, top trends, rising stars |
+| `/news`         | Latest posts from all sources with source filter        |
+| `/trends`       | Full trend list with search and date range filter       |
 | `/trends/:name` | Trend detail with score history chart and related posts |
-| `/predictions` | Rising star predictions with confidence scores |
-| `/categories` | Category breakdown with per-category bar charts |
+| `/predictions`  | Rising star predictions with confidence scores          |
+| `/categories`   | Category breakdown with per-category bar charts         |
 
 ## Tech Stack
 
@@ -35,8 +35,8 @@ npm run dev
 
 ## Environment
 
-| Variable | Description |
-|----------|-------------|
+| Variable            | Description            |
+| ------------------- | ---------------------- |
 | NUXT_PUBLIC_API_URL | TrendByte API base URL |
 
 ## Scripts
