@@ -3,9 +3,9 @@
     <h1 class="mb-2 text-3xl font-extrabold">Latest News</h1>
     <p class="text-text-secondary mb-6">Recent posts and articles from developer communities.</p>
 
-    <div class="mb-6 flex gap-2">
+    <div class="mb-6 flex flex-wrap gap-2">
       <button
-        v-for="s in ['all', 'github', 'hackernews', 'devto', 'lobsters']"
+        v-for="s in sources"
         :key="s"
         class="rounded-lg border px-3 py-1.5 text-xs font-medium transition"
         :class="
@@ -55,6 +55,11 @@ useHead({ title: 'News — TrendByte' })
 const { fetchNews } = useApi()
 
 const activeSource = ref('all')
+const { data: stats } = useFetch<{ active_sources: string[] }>(
+  `${useRuntimeConfig().public.apiUrl}/api/stats`,
+  { lazy: true },
+)
+const sources = computed(() => ['all', ...(stats.value?.active_sources || []).sort()])
 const {
   data: news,
   pending,
