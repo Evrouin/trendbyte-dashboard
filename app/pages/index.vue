@@ -51,6 +51,7 @@
             <tr>
               <th class="px-5 py-3 font-semibold">#</th>
               <th class="px-5 py-3 font-semibold">Name</th>
+              <th class="px-5 py-3 font-semibold">Category</th>
               <th class="px-5 py-3 font-semibold">Score</th>
               <th class="px-5 py-3 font-semibold">Growth</th>
               <th class="px-5 py-3 font-semibold">Sources</th>
@@ -58,7 +59,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(trend, i) in trends.trends"
+              v-for="(trend, i) in trends.trends.slice(0, 5)"
               :key="trend.name"
               class="border-border-subtle hover:bg-surface-hover border-b transition last:border-0"
             >
@@ -68,6 +69,7 @@
                   {{ trend.name }}
                 </NuxtLink>
               </td>
+              <td class="text-text-secondary px-5 py-3 text-xs">{{ trend.category || '—' }}</td>
               <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
               <td class="px-5 py-3">
                 <span
@@ -85,6 +87,11 @@
             </tr>
           </tbody>
         </table>
+        <div class="border-border border-t px-5 py-3 text-center">
+          <NuxtLink to="/trends" class="text-accent text-sm font-medium hover:underline">
+            See all trends →
+          </NuxtLink>
+        </div>
       </div>
     </section>
 
