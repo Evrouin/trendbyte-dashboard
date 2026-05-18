@@ -27,6 +27,21 @@
   --color-red: #f85149;
 }
 
+html.light {
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f6f8fa;
+  --color-bg-tertiary: #eef2f6;
+  --color-surface: rgba(0, 0, 0, 0.03);
+  --color-surface-hover: rgba(0, 0, 0, 0.06);
+  --color-border: rgba(0, 0, 0, 0.12);
+  --color-border-subtle: rgba(0, 0, 0, 0.08);
+  --color-accent: #0969da;
+  --color-accent-dim: #0550ae;
+  --color-text: #1f2328;
+  --color-text-secondary: #656d76;
+  --color-text-muted: #8b949e;
+}
+
 body {
   background: linear-gradient(
     135deg,

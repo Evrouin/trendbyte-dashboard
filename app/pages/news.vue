@@ -30,10 +30,7 @@
 
     <ErrorState v-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
 
-    <div
-      v-else-if="news?.news?.length"
-      class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
+    <div v-if="filteredNews.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <a
         v-for="item in filteredNews"
         :key="item.url + item.collected_at"
@@ -53,8 +50,17 @@
       </a>
     </div>
 
-    <div v-else class="glass-card p-8 text-center">
-      <p class="text-text-secondary">No news yet. Data appears after pipeline runs.</p>
+    <div v-if="filteredNews.length >= pageSize" class="mt-6 text-center">
+      <button
+        class="border-border text-text-secondary hover:border-accent hover:text-accent rounded-lg border px-4 py-2 text-sm transition"
+        @click="loadMore"
+      >
+        Load more
+      </button>
+    </div>
+
+    <div v-if="!filteredNews.length && !pending && news?.news" class="glass-card p-8 text-center">
+      <p class="text-text-secondary">No news found.</p>
     </div>
   </div>
 </template>
@@ -99,9 +105,21 @@ const filteredNews = computed(() => {
   )
 })
 
+const pageSize = 30
+
 const filterBySource = async (source: string) => {
   activeSource.value = source
-  const params = source === 'all' ? { limit: 30 } : { source, limit: 30 }
+  const params = source === 'all' ? { limit: pageSize } : { source, limit: pageSize }
+  const { data } = await fetchNews(params)
+  if (data.value) {
+    news.value = data.value
+  }
+}
+
+const loadMore = async () => {
+  const currentCount = news.value?.news?.length || 0
+  const params: Record<string, string | number> = { limit: currentCount + pageSize }
+  if (activeSource.value !== 'all') params.source = activeSource.value
   const { data } = await fetchNews(params)
   if (data.value) {
     news.value = data.value

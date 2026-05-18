@@ -9,14 +9,66 @@
         placeholder="Search trends..."
         class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-64"
       />
-      <select
-        v-model="selectedDays"
-        class="border-border bg-surface text-text focus:border-accent rounded-lg border px-4 py-2 text-sm outline-none"
-      >
-        <option :value="7">Last 7 days</option>
-        <option :value="14">Last 14 days</option>
-        <option :value="30">Last 30 days</option>
-      </select>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <button
+            class="border-border bg-surface text-text flex items-center gap-2 rounded-lg border px-4 py-2 text-sm"
+            @click="dropdownOpen = !dropdownOpen"
+          >
+            Last {{ selectedDays }} days
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="transition"
+              :class="{ 'rotate-180': dropdownOpen }"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+          <div
+            v-if="dropdownOpen"
+            class="border-border bg-bg-secondary absolute right-0 z-10 mt-1 w-36 overflow-hidden rounded-lg border shadow-lg"
+          >
+            <button
+              v-for="opt in [7, 14, 30]"
+              :key="opt"
+              class="hover:bg-surface-hover w-full px-4 py-2 text-left text-sm transition"
+              :class="selectedDays === opt ? 'text-accent' : 'text-text'"
+              @click="selectDays(opt)"
+            >
+              Last {{ opt }} days
+            </button>
+          </div>
+        </div>
+        <button
+          class="text-text-muted hover:text-accent text-xs transition"
+          title="Export CSV"
+          @click="exportCsv"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <ErrorState v-if="error" message="Failed to load trends" :retry="true" @retry="refresh" />
@@ -105,6 +157,12 @@ const { fetchTrends } = useApi()
 
 const search = ref('')
 const selectedDays = ref(30)
+const dropdownOpen = ref(false)
+
+const selectDays = (days: number) => {
+  selectedDays.value = days
+  dropdownOpen.value = false
+}
 
 const {
   data: trends,
@@ -121,5 +179,31 @@ const filteredTrends = computed(() => {
   if (!search.value) return trends.value.trends
   const q = search.value.toLowerCase()
   return trends.value.trends.filter((t) => t.name.toLowerCase().includes(q))
+})
+
+const exportCsv = () => {
+  if (!filteredTrends.value.length) return
+  const header = 'Name,Mentions,Score,Growth %,Sources'
+  const rows = filteredTrends.value.map(
+    (t) =>
+      `${t.name},${t.mentions},${Math.round(t.score)},${t.growth_pct.toFixed(1)},"${t.sources.join(', ')}"`,
+  )
+  const csv = [header, ...rows].join('\n')
+  const blob = new Blob([csv], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `trendbyte-trends-${selectedDays.value}d.csv`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement?.tagName !== 'INPUT') {
+      e.preventDefault()
+      document.querySelector<HTMLInputElement>('input[placeholder*="Search"]')?.focus()
+    }
+  })
 })
 </script>

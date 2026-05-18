@@ -1,28 +1,44 @@
 <template>
   <div v-if="data?.trend">
-    <NuxtLink
-      to="/trends"
-      class="text-text-secondary hover:text-accent mb-4 inline-block text-sm transition"
-    >
-      &larr; Back to trends
-    </NuxtLink>
+    <div class="mb-4 flex items-center justify-between">
+      <NuxtLink to="/trends" class="text-text-secondary hover:text-accent text-sm transition">
+        &larr; Back to trends
+      </NuxtLink>
+      <button class="text-text-secondary hover:text-accent text-sm transition" @click="share">
+        📋 Share
+      </button>
+    </div>
+
     <h1 class="mb-2 text-3xl font-extrabold">{{ data.trend.name }}</h1>
     <div class="text-text-secondary mb-8 flex gap-4 text-sm">
       <span>Score: {{ Math.round(data.trend.score).toLocaleString() }}</span>
       <span>Sources: {{ data.trend.sources.join(', ') }}</span>
     </div>
 
-    <section v-if="data.history.length" class="glass-card mb-10 p-6" style="height: 300px">
-      <ClientOnly>
-        <LineChart
-          :labels="data.history.map((h) => new Date(h.calculated_at).toLocaleDateString())"
-          :values="data.history.map((h) => Math.round(h.score))"
-          title="Score Over Time"
-        />
-      </ClientOnly>
-    </section>
+    <div class="mb-10 grid gap-6 lg:grid-cols-3">
+      <section
+        v-if="data.history.length"
+        class="glass-card p-6 lg:col-span-2"
+        style="height: 300px"
+      >
+        <ClientOnly>
+          <LineChart
+            :labels="data.history.map((h) => new Date(h.calculated_at).toLocaleDateString())"
+            :values="data.history.map((h) => Math.round(h.score))"
+            title="Score Over Time"
+          />
+        </ClientOnly>
+      </section>
 
-    <section v-if="data.posts?.length">
+      <section v-if="sourceBreakdown.labels.length" class="glass-card p-6" style="height: 300px">
+        <h3 class="text-text-secondary mb-2 text-xs font-semibold uppercase">Source Breakdown</h3>
+        <ClientOnly>
+          <PieChart :labels="sourceBreakdown.labels" :values="sourceBreakdown.values" />
+        </ClientOnly>
+      </section>
+    </div>
+
+    <section v-if="data.posts?.length" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Related Posts</h2>
       <div class="grid gap-3">
         <a
@@ -52,6 +68,24 @@
 <script setup lang="ts">
 const route = useRoute()
 const { fetchTrendDetail } = useApi()
+const { show: showToast } = useToast()
 
 const { data } = await fetchTrendDetail(route.params.name as string)
+
+const sourceBreakdown = computed(() => {
+  if (!data.value?.posts) return { labels: [], values: [] }
+  const counts: Record<string, number> = {}
+  for (const post of data.value.posts) {
+    counts[post.source] = (counts[post.source] || 0) + 1
+  }
+  return {
+    labels: Object.keys(counts),
+    values: Object.values(counts),
+  }
+})
+
+const share = async () => {
+  await navigator.clipboard.writeText(window.location.href)
+  showToast('Link copied to clipboard')
+}
 </script>

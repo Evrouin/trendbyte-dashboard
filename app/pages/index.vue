@@ -12,19 +12,21 @@
 
     <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
-        <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
+        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_mentions" /></p>
         <p class="text-text-secondary mt-1 text-sm">Mentions</p>
       </NuxtLink>
       <NuxtLink to="/trends" class="glass-card hover:bg-surface-hover p-6 transition">
-        <p class="text-3xl font-extrabold">{{ stats.total_trends }}</p>
+        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_trends" /></p>
         <p class="text-text-secondary mt-1 text-sm">Trends</p>
       </NuxtLink>
       <NuxtLink to="/predictions" class="glass-card hover:bg-surface-hover p-6 transition">
-        <p class="text-3xl font-extrabold">{{ stats.total_predictions }}</p>
+        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_predictions" /></p>
         <p class="text-text-secondary mt-1 text-sm">Predictions</p>
       </NuxtLink>
       <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
-        <p class="text-3xl font-extrabold">{{ stats.active_sources.length }}</p>
+        <p class="text-3xl font-extrabold">
+          <AnimatedCounter :value="stats.active_sources.length" />
+        </p>
         <p class="text-text-secondary mt-1 text-sm">Sources</p>
       </NuxtLink>
     </section>
@@ -149,10 +151,13 @@ const { data: predictions } = useFetch<{
   count: number
 }>(`${baseUrl}/api/predictions`, { params: { limit: 5 }, lazy: true })
 
+const { show: showToast } = useToast()
+
 onMounted(() => {
   const interval = setInterval(
     () => {
       refreshTrends()
+      showToast('Data refreshed')
     },
     5 * 60 * 1000,
   )
