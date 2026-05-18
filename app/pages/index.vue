@@ -2,7 +2,12 @@
   <div>
     <section class="mb-8">
       <h1 class="text-3xl font-extrabold">Dashboard</h1>
-      <p class="text-text-secondary mt-1">Tech trend intelligence overview</p>
+      <p class="text-text-secondary mt-1">
+        Tech trend intelligence overview
+        <span v-if="stats?.last_run" class="text-text-muted ml-2 text-xs">
+          · Updated {{ formatRelative(stats.last_run) }}
+        </span>
+      </p>
     </section>
 
     <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -117,6 +122,15 @@
 <script setup lang="ts">
 import { formatSignal } from '~/utils/formatSignal'
 useHead({ title: 'Overview — TrendByte' })
+
+const formatRelative = (date: string) => {
+  const diff = Date.now() - new Date(date).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  return `${Math.floor(hours / 24)}d ago`
+}
 
 const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl

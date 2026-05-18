@@ -111,6 +111,7 @@ const navLinks = [
   { to: '/', label: 'Overview' },
   { to: '/news', label: 'News' },
   { to: '/trends', label: 'Trends' },
+  { to: '/compare', label: 'Compare' },
   { to: '/predictions', label: 'Predictions' },
   { to: '/categories', label: 'Categories' },
 ]
