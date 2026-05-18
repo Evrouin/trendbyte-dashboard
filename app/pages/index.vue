@@ -6,22 +6,22 @@
     </section>
 
     <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-      <div class="glass-card p-6">
+      <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
         <p class="text-3xl font-extrabold">{{ stats.total_mentions.toLocaleString() }}</p>
         <p class="text-text-secondary mt-1 text-sm">Mentions</p>
-      </div>
-      <div class="glass-card p-6">
+      </NuxtLink>
+      <NuxtLink to="/trends" class="glass-card hover:bg-surface-hover p-6 transition">
         <p class="text-3xl font-extrabold">{{ stats.total_trends }}</p>
         <p class="text-text-secondary mt-1 text-sm">Trends</p>
-      </div>
-      <div class="glass-card p-6">
+      </NuxtLink>
+      <NuxtLink to="/predictions" class="glass-card hover:bg-surface-hover p-6 transition">
         <p class="text-3xl font-extrabold">{{ stats.total_predictions }}</p>
         <p class="text-text-secondary mt-1 text-sm">Predictions</p>
-      </div>
-      <div class="glass-card p-6">
+      </NuxtLink>
+      <NuxtLink to="/news" class="glass-card hover:bg-surface-hover p-6 transition">
         <p class="text-3xl font-extrabold">{{ stats.active_sources.length }}</p>
         <p class="text-text-secondary mt-1 text-sm">Sources</p>
-      </div>
+      </NuxtLink>
     </section>
 
     <section v-if="trends?.trends" class="mb-10">
