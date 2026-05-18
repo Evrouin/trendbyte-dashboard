@@ -51,7 +51,7 @@
             <tr>
               <th class="px-5 py-3 font-semibold">#</th>
               <th class="px-5 py-3 font-semibold">Name</th>
-              <th class="px-5 py-3 font-semibold">Category</th>
+              <th class="px-5 py-3 font-semibold">Mentions</th>
               <th class="px-5 py-3 font-semibold">Score</th>
               <th class="px-5 py-3 font-semibold">Growth</th>
               <th class="px-5 py-3 font-semibold">Sources</th>
@@ -69,7 +69,7 @@
                   {{ trend.name }}
                 </NuxtLink>
               </td>
-              <td class="text-text-secondary px-5 py-3 text-xs">{{ trend.category || '—' }}</td>
+              <td class="px-5 py-3">{{ Math.round(trend.mentions) }}</td>
               <td class="px-5 py-3">{{ Math.round(trend.score).toLocaleString() }}</td>
               <td class="px-5 py-3">
                 <span
