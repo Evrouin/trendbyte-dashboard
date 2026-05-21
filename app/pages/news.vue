@@ -67,7 +67,6 @@
 
 <script setup lang="ts">
 useHead({ title: 'News — TrendByte' })
-const { fetchNews } = useApi()
 
 import { useTrendsStore } from '~/stores/trends'
 
@@ -78,45 +77,36 @@ await store.fetchNews()
 const activeSource = ref('all')
 const search = ref('')
 const sources = computed(() => ['all', ...(store.stats?.active_sources || []).sort()])
-const news = computed(() => ({ news: store.news }))
 const pending = ref(false)
 const error = ref(false)
-const refresh = async () => {
-  store.invalidate()
-  await store.fetchNews()
-}
-
-const filteredNews = computed(() => {
-  if (!store.news.length) return []
-  const q = search.value.toLowerCase()
-  if (!q) return store.news
-  return store.news.filter(
-    (item) =>
-      item.name?.toLowerCase().includes(q) ||
-      item.source.toLowerCase().includes(q) ||
-      item.description?.toLowerCase().includes(q),
-  )
-})
 
 const pageSize = 30
 
-const filterBySource = async (source: string) => {
-  activeSource.value = source
-  const params = source === 'all' ? { limit: pageSize } : { source, limit: pageSize }
-  const { data } = await fetchNews(params)
-  if (data.value) {
-    news.value = data.value
+const filteredNews = computed(() => {
+  let items = store.news
+  if (activeSource.value !== 'all') {
+    items = items.filter((n) => n.source === activeSource.value)
   }
+  if (search.value) {
+    const q = search.value.toLowerCase()
+    items = items.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(q) ||
+        item.source.toLowerCase().includes(q) ||
+        item.description?.toLowerCase().includes(q),
+    )
+  }
+  return items
+})
+
+const filterBySource = (source: string) => {
+  activeSource.value = source
 }
 
 const loadMore = async () => {
-  const currentCount = news.value?.news?.length || 0
-  const params: Record<string, string | number> = { limit: currentCount + pageSize }
-  if (activeSource.value !== 'all') params.source = activeSource.value
-  const { data } = await fetchNews(params)
-  if (data.value) {
-    news.value = data.value
-  }
+  const currentCount = store.news.length
+  store.lastFetched = {}
+  await store.fetchNews({ limit: currentCount + pageSize })
 }
 
 const formatDate = (date: string) => {
