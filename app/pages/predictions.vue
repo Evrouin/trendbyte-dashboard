@@ -55,7 +55,6 @@
 useHead({ title: 'Predictions — TrendByte' })
 import { formatSignal } from '~/utils/formatSignal'
 
-const { fetchPredictions } = useApi()
 const {
   data: predictions,
   pending,

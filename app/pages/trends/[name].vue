@@ -84,10 +84,14 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const { fetchTrendDetail } = useApi()
 const { show: showToast } = useToast()
 
-const { data } = await fetchTrendDetail(route.params.name as string)
+const config = useRuntimeConfig()
+const { data } = await useFetch<{
+  history: { score: number; calculated_at: string }[]
+  posts: { source: string; name: string; url: string; description: string }[]
+  related: { name: string; score: number }[]
+}>(`${config.public.apiUrl}/api/trends/${route.params.name}`, { lazy: true })
 
 const sourceBreakdown = computed(() => {
   if (!data.value?.posts) return { labels: [], values: [] }

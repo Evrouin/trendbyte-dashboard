@@ -48,7 +48,6 @@
 
 <script setup lang="ts">
 useHead({ title: 'Categories — TrendByte' })
-const { fetchTrendsByCategory } = useApi()
 const { data, pending, error, refresh } = useFetch<{
   categories: { category: string; trends: { name: string; mentions: number; score: number }[] }[]
 }>(`${useRuntimeConfig().public.apiUrl}/api/trends/by-category`, {

@@ -153,8 +153,6 @@
 <script setup lang="ts">
 useHead({ title: 'Trends — TrendByte' })
 
-const { fetchTrends } = useApi()
-
 const search = ref('')
 const selectedDays = ref(30)
 const dropdownOpen = ref(false)
