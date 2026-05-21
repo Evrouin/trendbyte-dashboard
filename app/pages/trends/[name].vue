@@ -4,8 +4,24 @@
       <NuxtLink to="/trends" class="text-text-secondary hover:text-accent text-sm transition">
         &larr; Back to trends
       </NuxtLink>
-      <button class="text-text-secondary hover:text-accent text-sm transition" @click="share">
-        📋 Share
+      <button
+        class="text-text-secondary hover:text-accent relative text-sm transition"
+        @click="share"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+          />
+        </svg>
+        <span
+          v-if="copied"
+          class="text-accent absolute top-1/2 right-full mr-2 -translate-y-1/2 text-xs whitespace-nowrap"
+        >
+          Copied
+        </span>
       </button>
     </div>
 
@@ -119,8 +135,11 @@ const sourceBreakdown = computed(() => {
   }
 })
 
+const copied = ref(false)
+
 const share = async () => {
   await navigator.clipboard.writeText(window.location.href)
-  showToast('Link copied to clipboard')
+  copied.value = true
+  setTimeout(() => (copied.value = false), 2000)
 }
 </script>
