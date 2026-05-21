@@ -60,10 +60,10 @@ watch(
   async (names) => {
     const results = await Promise.all(
       names.map(async (name) => {
-        const { data } = await useFetch<{
+        const data = await $fetch<{
           history: { score: number; calculated_at: string }[]
-        }>(`${baseUrl}/api/trends/${name}`, { lazy: true })
-        const history = data.value?.history || []
+        }>(`${baseUrl}/api/trends/${name}`)
+        const history = data?.history || []
         return {
           name,
           labels: history.map((h) =>

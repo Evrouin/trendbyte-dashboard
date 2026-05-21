@@ -5,12 +5,9 @@
 
     <ErrorState v-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
-    <div
-      v-else-if="predictions?.predictions?.length"
-      class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-    >
+    <div v-else-if="store.predictions.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div
-        v-for="p in predictions.predictions"
+        v-for="p in store.predictions"
         :key="p.name"
         class="glass-card flex flex-col justify-between p-5"
       >
@@ -54,16 +51,26 @@
 <script setup lang="ts">
 useHead({ title: 'Predictions — TrendByte' })
 import { formatSignal } from '~/utils/formatSignal'
+import { useTrendsStore } from '~/stores/trends'
 
-const {
-  data: predictions,
-  pending,
-  error,
-  refresh,
-} = useFetch<{ predictions: import('~/types').Prediction[]; count: number }>(
-  `${useRuntimeConfig().public.apiUrl}/api/predictions`,
-  { params: { limit: 20 }, lazy: true },
-)
+const store = useTrendsStore()
+const error = ref(false)
+
+try {
+  await store.fetchPredictions(20)
+} catch {
+  error.value = true
+}
+
+const refresh = async () => {
+  error.value = false
+  try {
+    store.invalidate()
+    await store.fetchPredictions(20)
+  } catch {
+    error.value = true
+  }
+}
 
 const confidenceColor = (confidence: number) => {
   if (confidence >= 0.7) return 'bg-success/30 text-success'
