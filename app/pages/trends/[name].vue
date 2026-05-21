@@ -30,10 +30,16 @@
         </ClientOnly>
       </section>
 
-      <section v-if="sourceBreakdown.labels.length" class="glass-card p-6" style="height: 300px">
+      <section
+        v-if="sourceBreakdown.labels.length"
+        class="glass-card flex flex-col p-6"
+        style="height: 300px"
+      >
         <h3 class="text-text-secondary mb-2 text-xs font-semibold uppercase">Source Breakdown</h3>
         <ClientOnly>
-          <PieChart :labels="sourceBreakdown.labels" :values="sourceBreakdown.values" />
+          <div class="min-h-0 flex-1">
+            <PieChart :labels="sourceBreakdown.labels" :values="sourceBreakdown.values" />
+          </div>
         </ClientOnly>
       </section>
     </div>
