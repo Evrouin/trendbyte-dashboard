@@ -10,7 +10,14 @@
       </p>
     </section>
 
-    <section v-if="stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <section v-if="!store.stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+      <Skeleton h="h-24" />
+      <Skeleton h="h-24" />
+      <Skeleton h="h-24" />
+      <Skeleton h="h-24" />
+    </section>
+
+    <section v-else class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <NuxtLink
         to="/news"
         class="glass-card tooltip hover:bg-surface-hover p-6 transition"
