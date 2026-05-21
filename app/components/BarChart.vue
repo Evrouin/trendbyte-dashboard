@@ -36,7 +36,7 @@ const chartOptions = {
       display: !!props.title,
       text: props.title,
       color: '#f0f6fc',
-      font: { size: 14, weight: '600' as const },
+      font: { size: 14, weight: 'bold' as const },
     },
     tooltip: {
       backgroundColor: '#161b22',

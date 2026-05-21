@@ -3,16 +3,57 @@
     <h1 class="mb-2 text-3xl font-extrabold">Latest News</h1>
     <p class="text-text-secondary mb-6">Recent posts and articles from developer communities.</p>
 
-    <div class="mb-4">
+    <div class="mb-4 flex flex-wrap gap-3">
       <input
         v-model="search"
         type="text"
         placeholder="Search by name, source, keyword..."
-        class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
+        class="border-border bg-surface text-text focus:border-accent min-w-0 flex-1 rounded-lg border px-4 py-2 text-sm outline-none"
       />
+      <div class="relative md:hidden">
+        <button
+          class="border-border bg-surface text-text hover:border-accent flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition outline-none"
+          @click="sourceDropdownOpen = !sourceDropdownOpen"
+        >
+          {{ activeSource === 'all' ? 'All sources' : activeSource }}
+          <svg
+            class="h-3 w-3 transition"
+            :class="{ 'rotate-180': sourceDropdownOpen }"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+        <div
+          v-if="sourceDropdownOpen"
+          class="glass-card border-border absolute top-full left-0 z-40 mt-1 max-h-60 w-44 overflow-y-auto border shadow-lg"
+        >
+          <button
+            v-for="s in sources"
+            :key="s"
+            class="w-full px-3 py-2 text-left text-sm transition"
+            :class="
+              activeSource === s
+                ? 'text-accent bg-accent/10'
+                : 'text-text-secondary hover:bg-surface-hover hover:text-text'
+            "
+            @click="selectSource(s)"
+          >
+            {{ s === 'all' ? 'All sources' : s }}
+          </button>
+        </div>
+      </div>
+      <DateRangePicker v-model="dateRange" />
     </div>
 
-    <div class="mb-6 flex flex-wrap gap-2">
+    <div class="mb-6 hidden flex-wrap gap-2 md:flex">
       <button
         v-for="s in sources"
         :key="s"
@@ -28,7 +69,7 @@
       </button>
     </div>
 
-    <ErrorState v-if="error" message="Failed to load news" :retry="true" @retry="refresh" />
+    <ErrorState v-if="error" message="Failed to load news" />
 
     <div v-if="filteredNews.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       <a
@@ -59,7 +100,7 @@
       </button>
     </div>
 
-    <div v-if="!filteredNews.length && !pending && news?.news" class="glass-card p-8 text-center">
+    <div v-if="!filteredNews.length && !pending" class="glass-card p-8 text-center">
       <p class="text-text-secondary">No news found.</p>
     </div>
   </div>
@@ -76,11 +117,25 @@ await store.fetchNews()
 
 const activeSource = ref('all')
 const search = ref('')
+const dateRange = ref({ from: '', to: '' })
+const sourceDropdownOpen = ref(false)
 const sources = computed(() => ['all', ...(store.stats?.active_sources || []).sort()])
 const pending = ref(false)
 const error = ref(false)
 
 const pageSize = 30
+
+watch(
+  dateRange,
+  async (val) => {
+    const params: Record<string, string | number> = { limit: pageSize }
+    if (val.from) params.from_date = val.from
+    if (val.to) params.to_date = val.to
+    store.lastFetched = {}
+    await store.fetchNews(params)
+  },
+  { deep: true },
+)
 
 const filteredNews = computed(() => {
   let items = store.news
@@ -103,10 +158,18 @@ const filterBySource = (source: string) => {
   activeSource.value = source
 }
 
+const selectSource = (source: string) => {
+  filterBySource(source)
+  sourceDropdownOpen.value = false
+}
+
 const loadMore = async () => {
   const currentCount = store.news.length
+  const params: Record<string, string | number> = { limit: currentCount + pageSize }
+  if (dateRange.value.from) params.from_date = dateRange.value.from
+  if (dateRange.value.to) params.to_date = dateRange.value.to
   store.lastFetched = {}
-  await store.fetchNews({ limit: currentCount + pageSize })
+  await store.fetchNews(params)
 }
 
 const formatDate = (date: string) => {

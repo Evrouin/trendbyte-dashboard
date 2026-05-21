@@ -88,8 +88,16 @@ const { show: showToast } = useToast()
 
 const config = useRuntimeConfig()
 const { data } = await useFetch<{
+  trend: { name: string; score: number; sources: string[]; mentions: number; growth_pct: number }
   history: { score: number; calculated_at: string }[]
-  posts: { source: string; name: string; url: string; description: string }[]
+  posts: {
+    source: string
+    name: string
+    url: string
+    description: string
+    stars: number
+    collected_at: string
+  }[]
   related: { name: string; score: number }[]
 }>(`${config.public.apiUrl}/api/trends/${route.params.name}`, { lazy: true })
 
