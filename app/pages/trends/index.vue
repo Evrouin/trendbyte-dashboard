@@ -3,12 +3,14 @@
     <h1 class="mb-6 text-3xl font-extrabold">Trends</h1>
 
     <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search trends..."
-        class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-64"
-      />
+      <div class="tooltip" data-tooltip="Press '/' to focus">
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Search trends..."
+          class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-64"
+        />
+      </div>
       <div class="flex items-center gap-3">
         <div class="relative">
           <button
@@ -48,8 +50,8 @@
           </div>
         </div>
         <button
-          class="text-text-muted hover:text-accent text-xs transition"
-          title="Export CSV"
+          class="tooltip text-text-muted hover:text-accent text-xs transition"
+          data-tooltip="Export as CSV"
           @click="exportCsv"
         >
           <svg
@@ -153,6 +155,8 @@
 <script setup lang="ts">
 useHead({ title: 'Trends — TrendByte' })
 
+const store = useTrendsStore()
+
 const search = ref('')
 const selectedDays = ref(30)
 const dropdownOpen = ref(false)
@@ -164,7 +168,6 @@ const selectDays = (days: number) => {
 
 const {
   data: trends,
-  pending,
   error,
   refresh,
 } = useFetch<{ trends: import('~/types').Trend[]; count: number }>(

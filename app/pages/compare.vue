@@ -8,11 +8,12 @@
         v-for="name in availableTrends"
         :key="name"
         class="rounded-lg border px-3 py-1.5 text-xs font-medium transition"
-        :class="
+        :class="[
           selected.includes(name)
-            ? 'border-accent bg-accent/20 text-accent'
-            : 'border-border text-text-secondary hover:border-accent hover:text-accent'
-        "
+            ? 'tooltip border-accent bg-accent/20 text-accent'
+            : 'border-border text-text-secondary hover:border-accent hover:text-accent',
+        ]"
+        :data-tooltip="selected.includes(name) ? 'Click to remove' : undefined"
         @click="toggle(name)"
       >
         {{ name }}
@@ -37,12 +38,10 @@ useHead({ title: 'Compare — TrendByte' })
 const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl
 
-const { data: trends } = useFetch<{ trends: { name: string }[] }>(`${baseUrl}/api/trends`, {
-  params: { days: 30, limit: 20 },
-  lazy: true,
-})
+const store = useTrendsStore()
+await store.fetchTrends(30, 20)
 
-const availableTrends = computed(() => trends.value?.trends.map((t) => t.name) || [])
+const availableTrends = computed(() => store.trends.map((t) => t.name))
 const selected = ref<string[]>([])
 
 const toggle = (name: string) => {

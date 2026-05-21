@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 useHead({ title: 'Categories — TrendByte' })
-const { data, pending, error, refresh } = useFetch<{
+const { data, error, refresh } = useFetch<{
   categories: { category: string; trends: { name: string; mentions: number; score: number }[] }[]
 }>(`${useRuntimeConfig().public.apiUrl}/api/trends/by-category`, {
   params: { days: 7, limit: 5 },

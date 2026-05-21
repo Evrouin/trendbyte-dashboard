@@ -23,7 +23,9 @@
         class="glass-card tooltip hover:bg-surface-hover p-6 transition"
         data-tooltip="Total collected data points"
       >
-        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_mentions" /></p>
+        <p class="text-3xl font-extrabold">
+          <AnimatedCounter :value="stats?.total_mentions ?? 0" />
+        </p>
         <p class="text-text-secondary mt-1 text-sm">Mentions</p>
       </NuxtLink>
       <NuxtLink
@@ -31,7 +33,7 @@
         class="glass-card tooltip hover:bg-surface-hover p-6 transition"
         data-tooltip="Unique technologies tracked"
       >
-        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_trends" /></p>
+        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats?.total_trends ?? 0" /></p>
         <p class="text-text-secondary mt-1 text-sm">Trends</p>
       </NuxtLink>
       <NuxtLink
@@ -39,7 +41,9 @@
         class="glass-card tooltip hover:bg-surface-hover p-6 transition"
         data-tooltip="ML rising star predictions"
       >
-        <p class="text-3xl font-extrabold"><AnimatedCounter :value="stats.total_predictions" /></p>
+        <p class="text-3xl font-extrabold">
+          <AnimatedCounter :value="stats?.total_predictions ?? 0" />
+        </p>
         <p class="text-text-secondary mt-1 text-sm">Predictions</p>
       </NuxtLink>
       <NuxtLink
@@ -48,7 +52,7 @@
         data-tooltip="Total collected data points"
       >
         <p class="text-3xl font-extrabold">
-          <AnimatedCounter :value="stats.active_sources.length" />
+          <AnimatedCounter :value="stats?.active_sources?.length ?? 0" />
         </p>
         <p class="text-text-secondary mt-1 text-sm">Sources</p>
       </NuxtLink>
