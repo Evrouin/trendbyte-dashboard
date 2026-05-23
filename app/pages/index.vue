@@ -4,9 +4,11 @@
       <h1 class="text-3xl font-extrabold">Dashboard</h1>
       <p class="text-text-secondary mt-1">
         Tech trend intelligence overview
-        <span v-if="stats?.last_run" class="text-text-muted ml-2 text-xs">
-          · Updated {{ formatRelative(stats.last_run) }}
-        </span>
+        <ClientOnly>
+          <span v-if="stats?.last_run" class="text-text-muted ml-2 text-xs">
+            · Updated {{ formatRelative(stats.last_run) }}
+          </span>
+        </ClientOnly>
       </p>
     </section>
 
