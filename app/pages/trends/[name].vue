@@ -119,7 +119,10 @@ const config = useRuntimeConfig()
 
 const sanitizeParam = (param: string | string[]): string => {
   const raw = Array.isArray(param) ? param[0] : param
-  return encodeURIComponent(raw.replace(/<[^>]*>/g, '').slice(0, 200))
+  return raw
+    .replace(/<[^>]*>/g, '')
+    .trim()
+    .slice(0, 200)
 }
 
 const safeName = sanitizeParam(route.params.name)
