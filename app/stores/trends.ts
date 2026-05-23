@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { Trend, Stats, Prediction } from '~/types'
+import { fetchWithHmac } from '~/utils/fetchWithHmac'
 
 interface TrendsState {
   trends: Trend[]
@@ -33,7 +34,7 @@ export const useTrendsStore = defineStore('trends', {
       if (this.trends.length && !this.isStale(key)) return
 
       const config = useRuntimeConfig()
-      const data = await $fetch<{ trends: Trend[] }>(`${config.public.apiUrl}/api/trends`, {
+      const data = await fetchWithHmac<{ trends: Trend[] }>(`${config.public.apiUrl}/api/trends`, {
         params: { days, limit },
       })
       this.trends = data.trends
@@ -44,7 +45,7 @@ export const useTrendsStore = defineStore('trends', {
       if (this.stats && !this.isStale('stats')) return
 
       const config = useRuntimeConfig()
-      this.stats = await $fetch<Stats>(`${config.public.apiUrl}/api/stats`)
+      this.stats = await fetchWithHmac<Stats>(`${config.public.apiUrl}/api/stats`)
       this.lastFetched.stats = Date.now()
     },
 
@@ -52,7 +53,7 @@ export const useTrendsStore = defineStore('trends', {
       if (this.predictions.length && !this.isStale('predictions')) return
 
       const config = useRuntimeConfig()
-      const data = await $fetch<{ predictions: Prediction[] }>(
+      const data = await fetchWithHmac<{ predictions: Prediction[] }>(
         `${config.public.apiUrl}/api/predictions`,
         {
           params: { limit },
@@ -67,9 +68,12 @@ export const useTrendsStore = defineStore('trends', {
       if (this.news.length && !this.isStale(key)) return
 
       const config = useRuntimeConfig()
-      const data = await $fetch<{ news: TrendsState['news'] }>(`${config.public.apiUrl}/api/news`, {
-        params,
-      })
+      const data = await fetchWithHmac<{ news: TrendsState['news'] }>(
+        `${config.public.apiUrl}/api/news`,
+        {
+          params,
+        },
+      )
       this.news = data.news
       this.lastFetched[key] = Date.now()
     },

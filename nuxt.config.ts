@@ -15,6 +15,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://trendbyte.evrouin.com',
+      hmacSecret: process.env.NUXT_PUBLIC_HMAC_SECRET || '',
     },
   },
 
