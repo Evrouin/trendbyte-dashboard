@@ -63,6 +63,10 @@ const formatCategory = (cat: string) => {
     languages: 'Languages',
     databases: 'Databases',
     security: 'Security',
+    mobile: 'Mobile',
+    gaming: 'Gaming',
+    crypto: 'Crypto',
+    tools: 'Tools',
   }
   return names[cat] || cat.charAt(0).toUpperCase() + cat.slice(1)
 }
@@ -75,6 +79,10 @@ const categoryColor = (cat: string) => {
     languages: 'bg-warning/20 text-warning',
     databases: 'bg-yellow/20 text-yellow',
     security: 'bg-red/20 text-red',
+    mobile: 'bg-pink/20 text-pink',
+    gaming: 'bg-orange/20 text-orange',
+    crypto: 'bg-cyan/20 text-cyan',
+    tools: 'bg-teal/20 text-teal',
   }
   return colors[cat] || 'bg-accent/20 text-accent'
 }
