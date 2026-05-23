@@ -26,9 +26,16 @@
     </div>
 
     <h1 class="mb-2 text-3xl font-extrabold">{{ data.trend.name }}</h1>
-    <div class="text-text-secondary mb-8 flex gap-4 text-sm">
+    <div class="text-text-secondary mb-8 flex flex-wrap items-center gap-4 text-sm">
       <span>Score: {{ Math.round(data.trend.score).toLocaleString() }}</span>
       <span>Sources: {{ data.trend.sources.join(', ') }}</span>
+      <span
+        v-if="lifecycle"
+        class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+        :class="lifecycleClass"
+      >
+        {{ lifecycle.phase }}
+      </span>
     </div>
 
     <div class="mb-10 grid gap-6 lg:grid-cols-3">
@@ -122,6 +129,19 @@ const { data } = await useFetch<{
   }[]
   related: { name: string; score: number }[]
 }>(`${config.public.apiUrl}/api/trends/${route.params.name}`, { lazy: true })
+
+const { data: lifecycle } = await useFetch<{ phase: string; momentum: number }>(
+  `${config.public.apiUrl}/api/trends/${route.params.name}/lifecycle`,
+  { lazy: true },
+)
+
+const lifecycleClass = computed(() => {
+  const phase = lifecycle.value?.phase
+  if (phase === 'rising') return 'bg-success/20 text-success'
+  if (phase === 'peaking') return 'bg-warning/20 text-warning'
+  if (phase === 'declining') return 'bg-red/20 text-red'
+  return 'bg-accent/20 text-accent'
+})
 
 const sourceBreakdown = computed(() => {
   if (!data.value?.posts) return { labels: [], values: [] }

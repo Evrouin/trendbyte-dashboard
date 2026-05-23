@@ -8,15 +8,15 @@ Frontend for [TrendByte](https://github.com/Evrouin/trendbyte) — a tech trend 
 
 ## Pages
 
-| Route | Description |
-|-------|-------------|
-| `/` | Overview with stats, trend chart, top trends, rising stars |
-| `/news` | Latest posts with source filter, search, and date range picker |
-| `/trends` | Full trend list with search, date filter, and CSV export |
+| Route           | Description                                                       |
+| --------------- | ----------------------------------------------------------------- |
+| `/`             | Overview with stats, trend chart, top trends, rising stars        |
+| `/news`         | Latest posts with source filter, search, and date range picker    |
+| `/trends`       | Full trend list with search, date filter, and CSV export          |
 | `/trends/:name` | Trend detail with score history, source breakdown, related trends |
-| `/predictions` | Rising star predictions with confidence scores |
-| `/categories` | Category breakdown with per-category trends |
-| `/compare` | Compare up to 5 trends with overlaid score history |
+| `/predictions`  | Rising star predictions with confidence scores                    |
+| `/categories`   | Category breakdown with per-category trends                       |
+| `/compare`      | Compare up to 5 trends with overlaid score history                |
 
 ## Features
 
@@ -56,15 +56,15 @@ NUXT_PUBLIC_API_URL=http://localhost:8000
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Development server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `npm run format` | Prettier |
-| `npm run lint` | ESLint |
-| `npm run test` | Vitest unit tests |
-| `npm run typecheck` | Vue-tsc type checking |
+| Command             | Description              |
+| ------------------- | ------------------------ |
+| `npm run dev`       | Development server       |
+| `npm run build`     | Production build         |
+| `npm run preview`   | Preview production build |
+| `npm run format`    | Prettier                 |
+| `npm run lint`      | ESLint                   |
+| `npm run test`      | Vitest unit tests        |
+| `npm run typecheck` | Vue-tsc type checking    |
 
 ## Design
 
