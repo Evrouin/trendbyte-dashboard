@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 class="mb-6 text-3xl font-extrabold">Categories</h1>
+    <h1 class="mb-2 text-3xl font-extrabold">Categories</h1>
+    <p class="text-text-secondary mb-6">Technologies grouped by domain and use case.</p>
 
     <ErrorState v-if="error" message="Failed to load categories" :retry="true" @retry="refresh" />
 
