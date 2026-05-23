@@ -22,7 +22,14 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'TrendByte Dashboard',
-      meta: [{ name: 'description', content: 'Tech trend intelligence dashboard' }],
+      meta: [
+        { name: 'description', content: 'Tech trend intelligence dashboard' },
+        {
+          'http-equiv': 'Content-Security-Policy',
+          content:
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://trendbyte.evrouin.com; font-src 'self' https://fonts.gstatic.com;",
+        },
+      ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         {

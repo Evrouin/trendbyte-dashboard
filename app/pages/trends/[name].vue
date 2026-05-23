@@ -116,6 +116,14 @@ const route = useRoute()
 const { show: showToast } = useToast()
 
 const config = useRuntimeConfig()
+
+const sanitizeParam = (param: string | string[]): string => {
+  const raw = Array.isArray(param) ? param[0] : param
+  return encodeURIComponent(raw.replace(/<[^>]*>/g, '').slice(0, 200))
+}
+
+const safeName = sanitizeParam(route.params.name)
+
 const { data } = await useFetch<{
   trend: { name: string; score: number; sources: string[]; mentions: number; growth_pct: number }
   history: { score: number; calculated_at: string }[]
@@ -128,10 +136,10 @@ const { data } = await useFetch<{
     collected_at: string
   }[]
   related: { name: string; score: number }[]
-}>(`${config.public.apiUrl}/api/trends/${route.params.name}`, { lazy: true })
+}>(`${config.public.apiUrl}/api/trends/${safeName}`, { lazy: true })
 
 const { data: lifecycle } = await useFetch<{ phase: string; momentum: number }>(
-  `${config.public.apiUrl}/api/trends/${route.params.name}/lifecycle`,
+  `${config.public.apiUrl}/api/trends/${safeName}/lifecycle`,
   { lazy: true },
 )
 

@@ -17,5 +17,11 @@ export default defineNuxtPlugin(() => {
       options.headers.set('X-Signature', signature)
       options.headers.set('X-Timestamp', timestamp)
     },
+    onResponseError({ response }) {
+      const status = response.status
+      if (status === 429) console.warn('[API] Rate limited, please wait')
+      else if (status === 401) console.warn('[API] Unauthorized request')
+      else if (status >= 500) console.warn('[API] Server error, try again later')
+    },
   })
 })
