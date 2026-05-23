@@ -7,7 +7,7 @@
     <div v-else-if="data?.categories" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="cat in data.categories" :key="cat.category" class="glass-card p-6">
         <div class="mb-4 flex items-center justify-between">
-          <h3 class="text-lg font-bold capitalize">{{ cat.category }}</h3>
+          <h3 class="text-lg font-bold">{{ formatCategory(cat.category) }}</h3>
           <span
             class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
             :class="categoryColor(cat.category)"
@@ -54,6 +54,18 @@ const { data, error, refresh } = useFetch<{
   params: { days: 7, limit: 5 },
   lazy: true,
 })
+
+const formatCategory = (cat: string) => {
+  const names: Record<string, string> = {
+    ai: 'AI',
+    web: 'Web',
+    devops: 'DevOps',
+    languages: 'Languages',
+    databases: 'Databases',
+    security: 'Security',
+  }
+  return names[cat] || cat.charAt(0).toUpperCase() + cat.slice(1)
+}
 
 const categoryColor = (cat: string) => {
   const colors: Record<string, string> = {
