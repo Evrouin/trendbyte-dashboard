@@ -9,8 +9,10 @@ export async function fetchWithHmac<T>(url: string, options: FetchOptions = {}):
 
   const { signature, timestamp } = await signRequest(method, pathname, secret)
 
+  const { method: _m, ...rest } = options
   return $fetch<T>(url, {
-    ...options,
+    ...rest,
+    method: method as 'GET',
     headers: {
       ...(options.headers as Record<string, string>),
       'X-Signature': signature,

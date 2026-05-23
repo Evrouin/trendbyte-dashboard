@@ -117,8 +117,8 @@ const { show: showToast } = useToast()
 
 const config = useRuntimeConfig()
 
-const sanitizeParam = (param: string | string[]): string => {
-  const raw = Array.isArray(param) ? param[0] : param
+const sanitizeParam = (param: string | string[] | undefined): string => {
+  const raw = Array.isArray(param) ? (param[0] ?? '') : (param ?? '')
   return raw
     .replace(/<[^>]*>/g, '')
     .trim()
