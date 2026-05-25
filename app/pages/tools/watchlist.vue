@@ -11,7 +11,7 @@
         class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
         @focus="showSuggestions = true"
         @input="showSuggestions = true"
-        @blur="setTimeout(() => (showSuggestions = false), 200)"
+        @blur="hideSuggestions"
       />
       <div
         v-if="showSuggestions && suggestions.length"
@@ -76,6 +76,10 @@ const suggestions = computed(() => {
     .filter((n) => n.toLowerCase().includes(q) && !watchlist.has(n))
     .slice(0, 8)
 })
+
+const hideSuggestions = () => {
+  setTimeout(() => (showSuggestions.value = false), 200)
+}
 
 const addTech = (name: string) => {
   watchlist.add(name)
