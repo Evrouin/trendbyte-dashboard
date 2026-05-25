@@ -42,7 +42,7 @@ const chartData = computed(() => ({
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  layout: { padding: { bottom: 10 } },
+  layout: { padding: { bottom: 20 } },
   plugins: {
     legend: { display: false },
     title: {
@@ -61,7 +61,14 @@ const chartOptions = {
   },
   scales: {
     x: {
-      ticks: { color: '#8b949e', font: { size: 10 }, maxRotation: 30, padding: 6 },
+      ticks: {
+        color: '#8b949e',
+        font: { size: 10 },
+        maxRotation: 30,
+        padding: 6,
+        autoSkip: true,
+        maxTicksLimit: 8,
+      },
       grid: { display: false },
       border: { color: 'rgba(88, 166, 255, 0.1)' },
     },

@@ -41,7 +41,7 @@
     <div class="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
       <section
         v-if="data.history.length"
-        class="glass-card min-h-[250px] overflow-hidden p-6 md:h-[350px] lg:col-span-2"
+        class="glass-card h-[250px] overflow-hidden p-4 md:h-[350px] md:p-6 lg:col-span-2"
       >
         <div class="mb-3 flex gap-1">
           <button
