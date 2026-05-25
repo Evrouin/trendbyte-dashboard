@@ -95,7 +95,11 @@
           >
             <td class="text-text-secondary px-5 py-3">{{ i + 1 }}</td>
             <td class="px-5 py-3 font-bold">
-              <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
+              <NuxtLink
+                :to="`/trends/${trend.name}`"
+                class="text-accent flex items-center gap-2 hover:underline"
+              >
+                <TechIcon :name="trend.name" size="sm" />
                 {{ trend.name }}
               </NuxtLink>
             </td>
@@ -126,7 +130,9 @@
           class="glass-card flex items-center justify-between p-4"
         >
           <div>
-            <p class="text-accent font-bold">{{ i + 1 }}. {{ trend.name }}</p>
+            <p class="text-accent font-bold">
+              <TechIcon :name="trend.name" size="sm" /> {{ i + 1 }}. {{ trend.name }}
+            </p>
             <p class="text-text-secondary text-xs">
               {{ trend.mentions }} mentions · {{ trend.sources.join(', ') }}
             </p>
