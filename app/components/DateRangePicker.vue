@@ -17,11 +17,8 @@
       </span>
     </button>
 
-    <div
-      v-if="open"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 md:absolute md:inset-auto md:top-full md:right-0 md:mt-2 md:block md:bg-transparent md:p-0"
-    >
-      <div class="glass-card border-border w-full max-w-sm border p-4 shadow-lg md:w-72">
+    <div v-if="open" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4">
+      <div class="border-border bg-bg w-full max-w-xs rounded-xl border p-5 shadow-2xl">
         <div class="mb-3 flex items-center justify-between">
           <button class="text-text-secondary hover:text-text text-sm" @click="prevMonth">←</button>
           <span class="text-sm font-semibold">{{ monthLabel }}</span>

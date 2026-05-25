@@ -2,28 +2,43 @@
   <Teleport to="body">
     <div
       v-if="modelValue"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
       @click.self="emit('update:modelValue', false)"
     >
-      <div class="glass-card border-border w-full max-w-md border p-6 shadow-lg">
-        <h2 class="mb-4 text-lg font-bold">Export Trends</h2>
+      <div class="glass-card border-border w-full max-w-lg border p-8 shadow-2xl">
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="text-xl font-extrabold">Export Trends</h2>
+          <button
+            class="text-text-muted hover:text-text transition"
+            @click="emit('update:modelValue', false)"
+          >
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
 
-        <div class="mb-4">
-          <label class="text-text-secondary mb-1 block text-xs font-medium">Date Range</label>
+        <div class="mb-5">
+          <label class="text-text-secondary mb-2 block text-sm font-medium">Date Range</label>
           <DateRangePicker v-model="dateRange" />
         </div>
 
-        <div class="mb-4">
-          <label class="text-text-secondary mb-1 block text-xs font-medium">Data Type</label>
+        <div class="mb-5">
+          <label class="text-text-secondary mb-2 block text-sm font-medium">Data Type</label>
           <div class="flex gap-2">
             <button
               v-for="t in dataTypes"
               :key="t"
-              class="rounded-full border px-3 py-1 text-xs font-medium transition"
+              class="rounded-lg border px-4 py-2 text-sm font-medium transition"
               :class="
                 dataType === t
                   ? 'border-accent bg-accent/20 text-accent'
-                  : 'border-border text-text-secondary hover:border-accent'
+                  : 'border-border text-text-secondary hover:border-accent hover:text-accent'
               "
               @click="dataType = t"
             >
@@ -32,17 +47,17 @@
           </div>
         </div>
 
-        <div class="mb-6">
-          <label class="text-text-secondary mb-1 block text-xs font-medium">Format</label>
+        <div class="mb-8">
+          <label class="text-text-secondary mb-2 block text-sm font-medium">Format</label>
           <div class="flex gap-2">
             <button
               v-for="f in formats"
               :key="f"
-              class="rounded-full border px-3 py-1 text-xs font-medium transition"
+              class="rounded-lg border px-4 py-2 text-sm font-medium transition"
               :class="
                 format === f
                   ? 'border-accent bg-accent/20 text-accent'
-                  : 'border-border text-text-secondary hover:border-accent'
+                  : 'border-border text-text-secondary hover:border-accent hover:text-accent'
               "
               @click="format = f"
             >
@@ -52,10 +67,10 @@
         </div>
 
         <button
-          class="bg-accent w-full rounded-lg px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+          class="bg-accent w-full rounded-lg px-4 py-3 text-sm font-bold text-white transition hover:opacity-90"
           @click="download"
         >
-          Download
+          Download {{ dataType }} as {{ format }}
         </button>
       </div>
     </div>

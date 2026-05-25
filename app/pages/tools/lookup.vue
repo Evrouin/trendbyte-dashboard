@@ -1,33 +1,37 @@
 <template>
   <div>
-    <h1 class="mb-2 text-3xl font-extrabold">Tech Lookup</h1>
-    <p class="text-text-secondary mb-8">Instant insights on any technology.</p>
-
-    <div class="relative mx-auto mb-10 max-w-xl">
-      <input
-        v-model="query"
-        type="text"
-        placeholder="Search technologies..."
-        class="border-border bg-surface text-text focus:border-accent w-full rounded-xl border px-5 py-3 text-base outline-none"
-        @focus="showSuggestions = true"
-        @blur="setTimeout(() => (showSuggestions = false), 200)"
-      />
-      <div
-        v-if="showSuggestions && suggestions.length"
-        class="glass-card border-border absolute z-10 mt-2 max-h-60 w-full overflow-y-auto border shadow-lg"
-      >
-        <button
-          v-for="s in suggestions"
-          :key="s"
-          class="text-text-secondary hover:bg-surface-hover hover:text-text flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition"
-          @mousedown.prevent="select(s)"
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold">Tech Lookup</h1>
+        <p class="text-text-secondary mt-1">Instant insights on any technology.</p>
+      </div>
+      <div class="relative w-64 shrink-0">
+        <input
+          v-model="query"
+          type="text"
+          placeholder="Search technologies..."
+          class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
+          @focus="showSuggestions = true"
+          @input="showSuggestions = true"
+          @blur="setTimeout(() => (showSuggestions = false), 200)"
+        />
+        <div
+          v-if="showSuggestions && suggestions.length"
+          class="glass-card border-border absolute z-10 mt-2 max-h-60 w-full overflow-y-auto border shadow-lg"
         >
-          <TechIcon :name="s" size="sm" /> {{ s }}
-        </button>
+          <button
+            v-for="s in suggestions"
+            :key="s"
+            class="text-text-secondary hover:bg-surface-hover hover:text-text flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm transition"
+            @mousedown.prevent="select(s)"
+          >
+            <TechIcon :name="s" size="sm" /> {{ s }}
+          </button>
+        </div>
       </div>
     </div>
 
-    <div v-if="detail" class="mx-auto max-w-4xl">
+    <div v-if="detail">
       <div class="glass-card border-accent/20 border p-8">
         <div class="mb-6 flex items-center gap-4">
           <TechIcon :name="detail.trend.name" size="lg" />
@@ -43,7 +47,7 @@
           </div>
         </div>
 
-        <div class="mb-6 grid grid-cols-3 gap-4">
+        <div class="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
           <div class="glass-card p-4 text-center">
             <p class="text-accent text-2xl font-extrabold">
               {{ Math.round(detail.trend.score).toLocaleString() }}
@@ -58,19 +62,33 @@
             <p class="text-2xl font-extrabold">{{ detail.trend.sources.length }}</p>
             <p class="text-text-muted text-xs">Sources</p>
           </div>
+          <div class="glass-card p-4 text-center">
+            <p
+              class="text-2xl font-extrabold"
+              :class="detail.trend.growth_pct >= 0 ? 'text-success' : 'text-red'"
+            >
+              {{ detail.trend.growth_pct >= 0 ? '+' : ''
+              }}{{ Math.round(detail.trend.growth_pct) }}%
+            </p>
+            <p class="text-text-muted text-xs">Growth</p>
+          </div>
         </div>
 
-        <div v-if="historyScores.length" class="mb-6">
+        <div v-if="historyScores.length" class="mb-6 overflow-hidden">
           <p class="text-text-secondary mb-2 text-xs font-medium uppercase">Score Trend</p>
-          <SparkLine :values="historyScores" :width="500" :height="60" />
+          <SparkLine :values="historyScores" :width="300" :height="50" />
         </div>
 
-        <div class="text-text-secondary mb-6 flex flex-wrap gap-3 text-sm">
+        <div class="text-text-secondary mb-6 flex flex-wrap gap-4 text-sm">
           <span v-if="lifecycle" class="flex items-center gap-1">
             Lifecycle:
             <span class="text-accent font-semibold capitalize">{{ lifecycle }}</span>
           </span>
           <span>Sources: {{ detail.trend.sources.join(', ') }}</span>
+          <span v-if="detail.trend.growth_pct"
+            >Growth: {{ detail.trend.growth_pct >= 0 ? '+' : ''
+            }}{{ detail.trend.growth_pct.toFixed(1) }}%</span
+          >
         </div>
 
         <NuxtLink
@@ -82,8 +100,8 @@
       </div>
     </div>
 
-    <div v-else-if="!query" class="mx-auto max-w-xl text-center">
-      <div class="glass-card p-12">
+    <div v-else-if="!query" class="w-full">
+      <div class="glass-card p-12 text-center">
         <svg
           class="text-text-muted mx-auto mb-4 h-12 w-12"
           fill="none"

@@ -50,7 +50,8 @@ export const useTrendsStore = defineStore('trends', {
     },
 
     async fetchPredictions(limit = 10) {
-      if (this.predictions.length && !this.isStale('predictions')) return
+      const key = `predictions-${limit}`
+      if (this.predictions.length >= limit && !this.isStale(key)) return
 
       const config = useRuntimeConfig()
       const data = await fetchWithHmac<{ predictions: Prediction[] }>(
@@ -60,7 +61,7 @@ export const useTrendsStore = defineStore('trends', {
         },
       )
       this.predictions = data.predictions
-      this.lastFetched.predictions = Date.now()
+      this.lastFetched[key] = Date.now()
     },
 
     async fetchNews(params: Record<string, string | number> = { limit: 50 }) {
