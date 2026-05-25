@@ -3,7 +3,7 @@
     <h1 class="mb-2 text-3xl font-extrabold">Tech Lookup</h1>
     <p class="text-text-secondary mb-8">Instant insights on any technology.</p>
 
-    <div class="relative mx-auto mb-10 max-w-lg">
+    <div class="relative mx-auto mb-10 max-w-xl">
       <input
         v-model="query"
         type="text"
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div v-if="detail" class="mx-auto max-w-2xl">
+    <div v-if="detail" class="mx-auto max-w-4xl">
       <div class="glass-card border-accent/20 border p-8">
         <div class="mb-6 flex items-center gap-4">
           <TechIcon :name="detail.trend.name" size="lg" />
@@ -82,7 +82,7 @@
       </div>
     </div>
 
-    <div v-else-if="!query" class="mx-auto max-w-lg text-center">
+    <div v-else-if="!query" class="mx-auto max-w-xl text-center">
       <div class="glass-card p-12">
         <svg
           class="text-text-muted mx-auto mb-4 h-12 w-12"
