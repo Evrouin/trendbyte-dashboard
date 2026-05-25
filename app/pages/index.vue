@@ -36,7 +36,7 @@
         <p class="text-text-muted mt-4 text-xs md:text-sm">{{ daily.takeaway }}</p>
         <span
           v-if="daily.source_badge"
-          class="bg-surface-hover text-text-secondary absolute right-4 bottom-4 rounded-full px-3 py-1 text-xs"
+          class="bg-surface-hover text-text-secondary mt-4 inline-block rounded-full px-3 py-1 text-xs md:absolute md:right-4 md:bottom-4 md:mt-0"
         >
           {{ daily.source_badge }}
         </span>
