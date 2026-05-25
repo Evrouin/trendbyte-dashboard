@@ -30,7 +30,7 @@
             Score {{ Number(daily.stat.delta).toLocaleString() }}
           </span>
         </div>
-        <p class="text-text-muted mt-4 text-sm">{{ daily.takeaway }}</p>
+        <p class="text-text-muted mt-4 text-xs md:text-sm">{{ daily.takeaway }}</p>
         <span
           v-if="daily.source_badge"
           class="bg-surface-hover text-text-secondary absolute right-4 bottom-4 rounded-full px-3 py-1 text-xs"
