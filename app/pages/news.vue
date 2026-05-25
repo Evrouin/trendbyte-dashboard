@@ -85,7 +85,7 @@
         class="glass-card hover:bg-surface-hover flex min-w-0 flex-col justify-between overflow-hidden p-5 transition"
       >
         <div>
-          <p class="line-clamp-3 leading-snug font-medium">{{ item.description }}</p>
+          <p class="line-clamp-3 leading-snug font-medium">{{ item.description || item.url }}</p>
         </div>
         <div class="text-text-muted mt-4 flex flex-wrap items-center gap-2 text-xs">
           <span class="border-border-subtle rounded border px-1.5 py-0.5">{{ item.source }}</span>

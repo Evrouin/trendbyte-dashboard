@@ -94,7 +94,7 @@
           class="glass-card hover:bg-surface-hover flex items-start gap-4 px-5 py-4 transition"
         >
           <div class="flex-1">
-            <p class="leading-snug font-medium">{{ post.description }}</p>
+            <p class="leading-snug font-medium">{{ post.description || post.url }}</p>
             <div class="text-text-muted mt-2 flex items-center gap-3 text-xs">
               <span class="border-border-subtle rounded border px-1.5 py-0.5">{{
                 post.source
