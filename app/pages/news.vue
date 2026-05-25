@@ -16,7 +16,7 @@
         />
         <div class="relative md:hidden">
           <button
-            class="border-border bg-surface text-text hover:border-accent flex items-center gap-2 whitespace-nowrap rounded-lg border px-3 py-2 text-sm transition outline-none"
+            class="border-border bg-surface text-text hover:border-accent flex items-center gap-2 rounded-lg border px-3 py-2 text-sm whitespace-nowrap transition outline-none"
             @click="sourceDropdownOpen = !sourceDropdownOpen"
           >
             {{ activeSource === 'all' ? 'All sources' : activeSource }}

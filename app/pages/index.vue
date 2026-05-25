@@ -15,7 +15,10 @@
     <!-- Daily Signal Drop -->
     <section v-if="daily" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Daily Signal Drop</h2>
-      <div class="glass-card border-accent/30 relative overflow-hidden border p-8">
+      <NuxtLink
+        :to="`/trends/${daily.trend_name}`"
+        class="glass-card border-accent/30 hover:border-accent/50 relative block overflow-hidden border p-8 transition"
+      >
         <p class="text-text-secondary mb-2 text-sm font-medium tracking-wide uppercase">
           Today's Signal
         </p>
@@ -37,7 +40,7 @@
         >
           {{ daily.source_badge }}
         </span>
-      </div>
+      </NuxtLink>
     </section>
 
     <!-- Weekly Recap -->
