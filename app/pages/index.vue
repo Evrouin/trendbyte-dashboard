@@ -295,15 +295,12 @@
 
     <!-- Rising Stars -->
     <section v-if="risingStars.length">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-xl font-bold">Rising Stars</h2>
-        <NuxtLink to="/predictions" class="text-accent text-sm hover:underline">See all →</NuxtLink>
-      </div>
-      <div class="grid gap-3">
+      <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
+      <div class="glass-card overflow-hidden">
         <div
           v-for="p in risingStars"
           :key="p.name"
-          class="glass-card flex items-center gap-4 px-5 py-4"
+          class="border-border flex flex-wrap items-center gap-2 border-b px-5 py-4 last:border-0 md:gap-4"
         >
           <NuxtLink
             :to="`/trends/${p.name}`"
@@ -311,10 +308,24 @@
           >
             <TechIcon :name="p.name" size="sm" /> {{ p.name }}
           </NuxtLink>
-          <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
+          <span
+            class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            :class="
+              p.confidence >= 0.7
+                ? 'bg-success/30 text-success'
+                : p.confidence >= 0.5
+                  ? 'bg-yellow/30 text-yellow'
+                  : 'bg-accent/20 text-accent'
+            "
+          >
             {{ (p.confidence * 100).toFixed(0) }}%
           </span>
           <span class="text-text-muted text-xs">{{ p.signals.map(formatSignal).join(', ') }}</span>
+        </div>
+        <div class="border-border border-t px-5 py-3 text-center">
+          <NuxtLink to="/predictions" class="text-accent text-sm font-medium hover:underline">
+            See all predictions →
+          </NuxtLink>
         </div>
       </div>
     </section>
