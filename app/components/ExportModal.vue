@@ -84,7 +84,10 @@ const emit = defineEmits<{ (e: 'update:modelValue', val: boolean): void }>()
 const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl
 
-const dateRange = ref({ from: '', to: '' })
+const today = new Date()
+const thirtyDaysAgo = new Date(today.getTime() - 30 * 86400000)
+const toDateStr = (d: Date) => d.toISOString().slice(0, 10)
+const dateRange = ref({ from: toDateStr(thirtyDaysAgo), to: toDateStr(today) })
 const dataTypes = ['Trends', 'Mentions', 'Predictions'] as const
 const formats = ['CSV', 'JSON'] as const
 const dataType = ref<(typeof dataTypes)[number]>('Trends')
