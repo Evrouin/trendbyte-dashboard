@@ -13,7 +13,7 @@
       />
       <div
         v-if="showSuggestions && suggestions.length"
-        class="glass-card border-border absolute z-10 mt-1 max-h-48 w-full overflow-y-auto border shadow-lg"
+        class="border-border bg-bg absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border shadow-lg"
       >
         <button
           v-for="s in suggestions"
@@ -31,7 +31,11 @@
         v-if="watchlist.list.value.length"
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
       >
-        <div v-for="name in watchlist.list.value" :key="name" class="glass-card relative p-4">
+        <div
+          v-for="name in watchlist.list.value"
+          :key="name"
+          class="border-border bg-surface relative rounded-lg border p-4"
+        >
           <button
             class="text-text-muted hover:text-red absolute top-3 right-3 text-lg"
             @click="watchlist.remove(name)"
@@ -45,7 +49,7 @@
           <WatchlistCard :name="name" />
         </div>
       </div>
-      <div v-else class="glass-card p-8 text-center">
+      <div v-else class="border-border bg-surface rounded-lg border p-8 text-center">
         <p class="text-text-secondary">Add technologies to your watchlist to track them here.</p>
       </div>
     </ClientOnly>
