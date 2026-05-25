@@ -2,10 +2,10 @@
   <Teleport to="body">
     <div
       v-if="modelValue"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
       @click.self="emit('update:modelValue', false)"
     >
-      <div class="glass-card border-border w-full max-w-lg border p-8 shadow-2xl">
+      <div class="border-border bg-bg w-full max-w-lg rounded-xl border p-8 shadow-2xl">
         <div class="mb-6 flex items-center justify-between">
           <h2 class="text-xl font-extrabold">Export Trends</h2>
           <button
