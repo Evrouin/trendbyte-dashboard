@@ -12,6 +12,66 @@
       </p>
     </section>
 
+    <!-- Daily Signal Drop -->
+    <section v-if="daily" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Daily Signal Drop</h2>
+      <div
+        class="glass-card relative overflow-hidden p-8"
+        style="border-image: linear-gradient(135deg, var(--color-accent), var(--color-success)) 1"
+      >
+        <p class="text-text-secondary mb-2 text-sm font-medium tracking-wide uppercase">
+          Today's Signal
+        </p>
+        <h3 class="text-2xl font-extrabold md:text-3xl">{{ daily.headline }}</h3>
+        <div class="mt-4 flex items-baseline gap-3">
+          <span class="text-accent text-4xl font-extrabold">{{ daily.stat_value }}</span>
+          <span class="text-text-secondary text-sm">{{ daily.stat_label }}</span>
+          <span
+            v-if="daily.delta != null"
+            class="rounded-full px-2 py-0.5 text-xs font-semibold"
+            :class="daily.delta >= 0 ? 'bg-success/20 text-success' : 'bg-red/20 text-red'"
+          >
+            {{ daily.delta >= 0 ? '+' : '' }}{{ daily.delta }}%
+          </span>
+        </div>
+        <p class="text-text-muted mt-4 text-sm">{{ daily.takeaway }}</p>
+        <span
+          v-if="daily.source"
+          class="bg-surface-hover text-text-secondary absolute right-4 bottom-4 rounded-full px-3 py-1 text-xs"
+        >
+          {{ daily.source }}
+        </span>
+      </div>
+    </section>
+
+    <!-- Weekly Recap -->
+    <section v-if="weekly" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Weekly Recap</h2>
+      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div class="glass-card p-4">
+          <p class="text-text-secondary text-xs font-medium">Most Discussed</p>
+          <p class="mt-1 text-lg font-bold">{{ weekly.most_discussed?.name }}</p>
+          <p class="text-text-muted text-xs">{{ weekly.most_discussed?.mentions }} mentions</p>
+        </div>
+        <div class="glass-card p-4">
+          <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
+          <p class="mt-1 text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
+          <p class="text-success text-xs">+{{ weekly.rising_tool?.growth }}%</p>
+        </div>
+        <div class="glass-card p-4">
+          <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
+          <p class="mt-1 text-lg font-bold">{{ weekly.community_vibe?.positive_ratio }}%</p>
+          <p class="text-text-muted text-xs">positive</p>
+        </div>
+        <div class="glass-card p-4">
+          <p class="text-text-secondary text-xs font-medium">Faded</p>
+          <p class="mt-1 text-lg font-bold">{{ weekly.faded?.name }}</p>
+          <p class="text-red text-xs">{{ weekly.faded?.decline }}%</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats row -->
     <section v-if="!store.stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
       <Skeleton h="h-24" />
       <Skeleton h="h-24" />
@@ -60,6 +120,7 @@
       </NuxtLink>
     </section>
 
+    <!-- Trend Scores Chart -->
     <section v-if="trends?.trends" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Trend Scores</h2>
       <div class="glass-card p-6" style="height: 300px">
@@ -79,6 +140,7 @@
       @retry="refreshTrends"
     />
 
+    <!-- Top Trends table -->
     <section v-if="trends?.trends" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Top Trends</h2>
       <div class="glass-card overflow-hidden">
@@ -161,6 +223,7 @@
       </div>
     </section>
 
+    <!-- Rising Stars -->
     <section v-if="predictions?.predictions?.length">
       <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
       <div class="grid gap-3">
@@ -188,6 +251,8 @@ import { useTrendsStore } from '~/stores/trends'
 
 useHead({ title: 'Overview — TrendByte' })
 
+const config = useRuntimeConfig()
+
 const formatRelative = (date: string) => {
   const diff = Date.now() - new Date(date).getTime()
   const mins = Math.floor(diff / 60000)
@@ -206,6 +271,14 @@ const stats = computed(() => store.stats)
 const trends = computed(() => ({ trends: store.trends }))
 const predictions = computed(() => ({ predictions: store.predictions }))
 const trendsError = ref(false)
+
+// Content card data
+const { data: daily } = await useFetch<Record<string, any>>(
+  `${config.public.apiUrl}/api/content/daily`,
+)
+const { data: weekly } = await useFetch<Record<string, any>>(
+  `${config.public.apiUrl}/api/content/weekly`,
+)
 
 const { show: showToast } = useToast()
 
