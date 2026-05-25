@@ -15,31 +15,27 @@
     <!-- Daily Signal Drop -->
     <section v-if="daily" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Daily Signal Drop</h2>
-      <div
-        class="glass-card relative overflow-hidden p-8"
-        style="border-image: linear-gradient(135deg, var(--color-accent), var(--color-success)) 1"
-      >
+      <div class="glass-card border-accent/30 relative overflow-hidden border p-8">
         <p class="text-text-secondary mb-2 text-sm font-medium tracking-wide uppercase">
           Today's Signal
         </p>
         <h3 class="text-2xl font-extrabold md:text-3xl">{{ daily.headline }}</h3>
         <div class="mt-4 flex items-baseline gap-3">
-          <span class="text-accent text-4xl font-extrabold">{{ daily.stat_value }}</span>
-          <span class="text-text-secondary text-sm">{{ daily.stat_label }}</span>
+          <span class="text-accent text-4xl font-extrabold">{{ daily.stat?.value }}</span>
+          <span class="text-text-secondary text-sm">{{ daily.stat?.label }}</span>
           <span
-            v-if="daily.delta != null"
-            class="rounded-full px-2 py-0.5 text-xs font-semibold"
-            :class="daily.delta >= 0 ? 'bg-success/20 text-success' : 'bg-red/20 text-red'"
+            v-if="daily.stat?.delta"
+            class="bg-success/20 text-success rounded-full px-2 py-0.5 text-xs font-semibold"
           >
-            {{ daily.delta >= 0 ? '+' : '' }}{{ daily.delta }}%
+            {{ daily.stat.delta }}
           </span>
         </div>
         <p class="text-text-muted mt-4 text-sm">{{ daily.takeaway }}</p>
         <span
-          v-if="daily.source"
+          v-if="daily.source_badge"
           class="bg-surface-hover text-text-secondary absolute right-4 bottom-4 rounded-full px-3 py-1 text-xs"
         >
-          {{ daily.source }}
+          {{ daily.source_badge }}
         </span>
       </div>
     </section>
@@ -56,17 +52,21 @@
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
           <p class="mt-1 text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
-          <p class="text-success text-xs">+{{ weekly.rising_tool?.growth }}%</p>
+          <p class="text-success text-xs">
+            +{{ Math.round(weekly.rising_tool?.growth_pct || 0) }}%
+          </p>
         </div>
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
-          <p class="mt-1 text-lg font-bold">{{ weekly.community_vibe?.positive_ratio }}%</p>
+          <p class="mt-1 text-lg font-bold">
+            {{ ((weekly.community_vibe?.average_sentiment || 0) * 100).toFixed(0) }}%
+          </p>
           <p class="text-text-muted text-xs">positive</p>
         </div>
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Faded</p>
           <p class="mt-1 text-lg font-bold">{{ weekly.faded?.name }}</p>
-          <p class="text-red text-xs">{{ weekly.faded?.decline }}%</p>
+          <p class="text-red text-xs">{{ Math.round(weekly.faded?.growth_pct || 0) }}%</p>
         </div>
       </div>
     </section>
