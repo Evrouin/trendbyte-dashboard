@@ -44,6 +44,19 @@
         class="glass-card p-6 lg:col-span-2"
         style="height: 300px"
       >
+        <div class="mb-3 flex gap-1">
+          <button
+            v-for="g in ['daily', 'weekly', 'monthly']"
+            :key="g"
+            class="rounded px-2.5 py-1 text-xs font-medium transition"
+            :class="
+              granularity === g ? 'bg-accent/20 text-accent' : 'text-text-secondary hover:text-text'
+            "
+            @click="granularity = g"
+          >
+            {{ g.charAt(0).toUpperCase() + g.slice(1) }}
+          </button>
+        </div>
         <ClientOnly>
           <LineChart
             :labels="data.history.map((h) => new Date(h.calculated_at).toLocaleDateString())"
@@ -127,6 +140,8 @@ const sanitizeParam = (param: string | string[] | undefined): string => {
 
 const safeName = sanitizeParam(route.params.name)
 
+const granularity = ref('weekly')
+
 const { data } = await useFetch<{
   trend: { name: string; score: number; sources: string[]; mentions: number; growth_pct: number }
   history: { score: number; calculated_at: string }[]
@@ -139,7 +154,10 @@ const { data } = await useFetch<{
     collected_at: string
   }[]
   related: { name: string; score: number }[]
-}>(`${config.public.apiUrl}/api/trends/${safeName}`, { lazy: true })
+}>(`${config.public.apiUrl}/api/trends/${safeName}`, {
+  lazy: true,
+  query: computed(() => ({ granularity: granularity.value })),
+})
 
 const { data: lifecycle } = await useFetch<{ phase: string; momentum: number }>(
   `${config.public.apiUrl}/api/trends/${safeName}/lifecycle`,
