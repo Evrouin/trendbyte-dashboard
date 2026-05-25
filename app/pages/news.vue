@@ -1,56 +1,61 @@
 <template>
   <div>
-    <h1 class="mb-2 text-3xl font-extrabold">Latest News</h1>
-    <p class="text-text-secondary mb-6">Recent posts and articles from developer communities.</p>
-
-    <div class="mb-4 flex flex-wrap gap-3">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Search by name, source, keyword..."
-        class="border-border bg-surface text-text focus:border-accent min-w-0 flex-1 rounded-lg border px-4 py-2 text-sm outline-none"
-      />
-      <div class="relative md:hidden">
-        <button
-          class="border-border bg-surface text-text hover:border-accent flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition outline-none"
-          @click="sourceDropdownOpen = !sourceDropdownOpen"
-        >
-          {{ activeSource === 'all' ? 'All sources' : activeSource }}
-          <svg
-            class="h-3 w-3 transition"
-            :class="{ 'rotate-180': sourceDropdownOpen }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-        <div
-          v-if="sourceDropdownOpen"
-          class="glass-card border-border absolute top-full right-0 z-40 mt-1 max-h-60 w-44 overflow-y-auto border shadow-lg"
-        >
-          <button
-            v-for="s in sources"
-            :key="s"
-            class="w-full px-3 py-2 text-left text-sm transition"
-            :class="
-              activeSource === s
-                ? 'text-accent bg-accent/10'
-                : 'text-text-secondary hover:bg-surface-hover hover:text-text'
-            "
-            @click="selectSource(s)"
-          >
-            {{ s === 'all' ? 'All sources' : s }}
-          </button>
-        </div>
+    <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>
+        <h1 class="text-3xl font-extrabold">Latest News</h1>
+        <p class="text-text-secondary mt-1">
+          Recent posts and articles from developer communities.
+        </p>
       </div>
-      <DateRangePicker v-model="dateRange" />
+      <div class="flex items-center gap-3">
+        <input
+          v-model="search"
+          type="text"
+          placeholder="Search..."
+          class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-48"
+        />
+        <div class="relative md:hidden">
+          <button
+            class="border-border bg-surface text-text hover:border-accent flex items-center gap-2 whitespace-nowrap rounded-lg border px-3 py-2 text-sm transition outline-none"
+            @click="sourceDropdownOpen = !sourceDropdownOpen"
+          >
+            {{ activeSource === 'all' ? 'All sources' : activeSource }}
+            <svg
+              class="h-3 w-3 transition"
+              :class="{ 'rotate-180': sourceDropdownOpen }"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          <div
+            v-if="sourceDropdownOpen"
+            class="glass-card border-border absolute top-full right-0 z-40 mt-1 max-h-60 w-44 overflow-y-auto border shadow-lg"
+          >
+            <button
+              v-for="s in sources"
+              :key="s"
+              class="w-full px-3 py-2 text-left text-sm transition"
+              :class="
+                activeSource === s
+                  ? 'text-accent bg-accent/10'
+                  : 'text-text-secondary hover:bg-surface-hover hover:text-text'
+              "
+              @click="selectSource(s)"
+            >
+              {{ s === 'all' ? 'All sources' : s }}
+            </button>
+          </div>
+        </div>
+        <DateRangePicker v-model="dateRange" />
+      </div>
     </div>
 
     <div class="mb-6 hidden flex-wrap gap-2 md:flex">
