@@ -70,9 +70,9 @@
           >
             {{ link.label }}
           </NuxtLink>
-          <div class="relative" @mouseenter="toolsOpen = true" @mouseleave="toolsOpen = false">
+          <div class="relative">
             <button
-              class="transition"
+              class="flex items-center gap-1 transition"
               :class="
                 isActive('/tools')
                   ? 'text-accent font-semibold'
@@ -81,6 +81,20 @@
               @click="toolsOpen = !toolsOpen"
             >
               Tools
+              <svg
+                class="h-3 w-3 transition"
+                :class="{ 'rotate-180': toolsOpen }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
             </button>
             <div
               v-if="toolsOpen"
