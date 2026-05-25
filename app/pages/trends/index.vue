@@ -2,16 +2,16 @@
   <div>
     <h1 class="mb-6 text-3xl font-extrabold">Trends</h1>
 
-    <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div class="tooltip" data-tooltip="Press '/' to focus">
+    <div class="mb-6 flex items-center gap-3">
+      <div class="tooltip min-w-0 flex-1" data-tooltip="Press '/' to focus">
         <input
           v-model="search"
           type="text"
           placeholder="Search trends..."
-          class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none md:w-64"
+          class="border-border bg-surface text-text placeholder-text-muted focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
         />
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex shrink-0 items-center gap-2">
         <div class="relative">
           <button
             class="border-border bg-surface text-text flex items-center gap-2 rounded-lg border px-4 py-2 text-sm"
