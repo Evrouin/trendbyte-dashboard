@@ -126,8 +126,12 @@ useHead({ title: 'Tech Lookup — TrendByte' })
 
 const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl
-const store = useTrendsStore()
-await store.fetchTrends(365, 100)
+
+const allNames = ref<string[]>([])
+onMounted(async () => {
+  const data = await fetchWithHmac<{ names: string[] }>(`${baseUrl}/api/trends/names`)
+  allNames.value = data.names
+})
 
 const query = ref('')
 const showSuggestions = ref(false)
@@ -136,10 +140,7 @@ const detail = ref<any>(null)
 const suggestions = computed(() => {
   if (!query.value) return []
   const q = query.value.toLowerCase()
-  return store.trends
-    .map((t) => t.name)
-    .filter((n) => n.toLowerCase().includes(q))
-    .slice(0, 8)
+  return allNames.value.filter((n) => n.toLowerCase().includes(q)).slice(0, 10)
 })
 
 const lifecycle = computed(() => {

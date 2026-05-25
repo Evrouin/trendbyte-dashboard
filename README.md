@@ -8,15 +8,15 @@ Frontend for [TrendByte](https://github.com/Evrouin/trendbyte) — a tech trend 
 
 ## Pages
 
-| Route           | Description                                                              |
-| --------------- | ------------------------------------------------------------------------ |
-| `/`             | Dashboard with content cards, stats, trend chart, top trends, rising stars |
-| `/news`         | Latest posts with source filter, search, and date range picker           |
-| `/trends`       | Full trend list with search, date filter, and CSV export                 |
+| Route           | Description                                                                  |
+| --------------- | ---------------------------------------------------------------------------- |
+| `/`             | Dashboard with content cards, stats, trend chart, top trends, rising stars   |
+| `/news`         | Latest posts with source filter, search, and date range picker               |
+| `/trends`       | Full trend list with search, date filter, and CSV export                     |
 | `/trends/:name` | Trend detail with score history, lifecycle, source breakdown, related trends |
-| `/predictions`  | Rising star predictions with confidence scores                           |
-| `/categories`   | Category breakdown with per-category trends                              |
-| `/tools`        | Tech Lookup, Compare, Watchlist, Export Trends                           |
+| `/predictions`  | Rising star predictions with confidence scores                               |
+| `/categories`   | Category breakdown with per-category trends                                  |
+| `/tools`        | Tech Lookup, Compare, Watchlist, Export Trends                               |
 
 ## Features
 
@@ -39,12 +39,12 @@ Frontend for [TrendByte](https://github.com/Evrouin/trendbyte) — a tech trend 
 
 ## Tools
 
-| Tool | Description |
-| ---- | ----------- |
-| Tech Lookup | Search and view details for any tracked technology |
-| Compare | Compare up to 5 trends with overlaid score history |
-| Watchlist | Save trends to a personal watchlist (localStorage persistence) |
-| Export Trends | Export trends data as CSV or JSON via modal |
+| Tool          | Description                                                    |
+| ------------- | -------------------------------------------------------------- |
+| Tech Lookup   | Search and view details for any tracked technology             |
+| Compare       | Compare up to 5 trends with overlaid score history             |
+| Watchlist     | Save trends to a personal watchlist (localStorage persistence) |
+| Export Trends | Export trends data as CSV or JSON via modal                    |
 
 ## Tech Stack
 
