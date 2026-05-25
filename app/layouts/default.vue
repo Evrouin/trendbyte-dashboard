@@ -1,6 +1,9 @@
 <template>
   <div class="flex min-h-screen min-w-0 flex-col overflow-x-hidden">
-    <nav class="border-border border-b px-6 py-4">
+    <nav
+      class="border-border bg-bg fixed right-0 left-0 z-40 border-b px-6 py-4 transition-transform duration-300"
+      :class="navHidden ? '-translate-y-full' : 'translate-y-0'"
+    >
       <div class="mx-auto flex max-w-7xl items-center justify-between">
         <NuxtLink
           to="/"
@@ -206,7 +209,7 @@
       </div>
     </nav>
 
-    <main class="mx-auto w-full max-w-7xl flex-1 px-6 py-8">
+    <main class="mx-auto w-full max-w-7xl flex-1 px-6 pt-20 pb-8">
       <slot />
     </main>
 
@@ -241,8 +244,21 @@ const route = useRoute()
 const menuOpen = ref(false)
 const toolsOpen = ref(false)
 const showExportModal = ref(false)
+const navHidden = ref(false)
+let lastScrollY = 0
 const { isDark, toggle: toggleTheme, init: initTheme } = useTheme()
-onMounted(() => initTheme())
+onMounted(() => {
+  initTheme()
+  window.addEventListener(
+    'scroll',
+    () => {
+      const y = window.scrollY
+      navHidden.value = y > 60 && y > lastScrollY
+      lastScrollY = y
+    },
+    { passive: true },
+  )
+})
 
 const navLinks = [
   { to: '/', label: 'Overview' },
