@@ -16,7 +16,7 @@
         :data-tooltip="selected.includes(name) ? 'Click to remove' : undefined"
         @click="toggle(name)"
       >
-        {{ name }}
+        <TechIcon :name="name" size="sm" /> {{ name }}
       </button>
     </div>
 

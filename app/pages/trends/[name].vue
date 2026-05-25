@@ -25,7 +25,9 @@
       </button>
     </div>
 
-    <h1 class="mb-2 text-3xl font-extrabold">{{ data.trend.name }}</h1>
+    <h1 class="mb-2 flex items-center gap-2 text-3xl font-extrabold">
+      <TechIcon :name="data.trend.name" size="md" /> {{ data.trend.name }}
+    </h1>
     <div class="text-text-secondary mb-8 flex flex-wrap items-center gap-4 text-sm">
       <span>Score: {{ Math.round(data.trend.score).toLocaleString() }}</span>
       <span>Sources: {{ data.trend.sources.join(', ') }}</span>
@@ -115,8 +117,9 @@
           v-for="r in data.related"
           :key="r.name"
           :to="`/trends/${r.name}`"
-          class="glass-card hover:bg-surface-hover px-4 py-2 text-sm transition"
+          class="glass-card hover:bg-surface-hover flex items-center gap-1.5 px-4 py-2 text-sm transition"
         >
+          <TechIcon :name="r.name" size="sm" />
           <span class="text-accent font-medium">{{ r.name }}</span>
           <span class="text-text-muted ml-2 text-xs">{{
             Math.round(r.score).toLocaleString()

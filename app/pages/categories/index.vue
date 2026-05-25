@@ -39,7 +39,7 @@
             <div class="flex items-center gap-2">
               <span class="text-text-muted">{{ i + 1 }}.</span>
               <NuxtLink :to="`/trends/${t.name}`" class="text-accent hover:underline">
-                {{ t.name }}
+                <TechIcon :name="t.name" size="sm" /> {{ t.name }}
               </NuxtLink>
             </div>
             <span class="text-text-secondary">{{ Math.round(t.score).toLocaleString() }}</span>

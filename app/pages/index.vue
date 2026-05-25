@@ -46,12 +46,18 @@
       <div class="grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
         <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Most Discussed</p>
-          <p class="mt-1 truncate text-lg font-bold">{{ weekly.most_discussed?.name }}</p>
+          <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
+            <TechIcon :name="weekly.most_discussed?.name || ''" size="sm" />
+            {{ weekly.most_discussed?.name }}
+          </p>
           <p class="text-text-muted text-xs">{{ weekly.most_discussed?.mentions }} mentions</p>
         </div>
         <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
-          <p class="mt-1 truncate text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
+          <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
+            <TechIcon :name="weekly.rising_tool?.name || ''" size="sm" />
+            {{ weekly.rising_tool?.name }}
+          </p>
           <p class="text-success text-xs">+{{ formatGrowth(weekly.rising_tool?.growth_pct) }}%</p>
         </div>
         <div class="glass-card min-w-0 overflow-hidden p-4">
@@ -65,7 +71,9 @@
         </div>
         <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Faded</p>
-          <p class="mt-1 truncate text-lg font-bold">{{ weekly.faded?.name }}</p>
+          <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
+            <TechIcon :name="weekly.faded?.name || ''" size="sm" /> {{ weekly.faded?.name }}
+          </p>
           <p class="text-red text-xs">{{ formatGrowth(weekly.faded?.growth_pct) }}%</p>
         </div>
       </div>
@@ -150,7 +158,7 @@
         <table class="hidden w-full text-left text-sm md:table">
           <thead class="border-border text-text-secondary border-b">
             <tr>
-              <th class="px-5 py-3 font-semibold">#</th>
+              <th class="px-5 py-3"></th>
               <th class="px-5 py-3 font-semibold">Name</th>
               <th class="px-5 py-3 font-semibold">Mentions</th>
               <th class="px-5 py-3 font-semibold">Score</th>
@@ -164,10 +172,24 @@
               :key="trend.name"
               class="border-border-subtle hover:bg-surface-hover border-b transition last:border-0"
             >
-              <td class="text-text-secondary px-5 py-3">{{ i + 1 }}</td>
+              <td class="px-5 py-3">
+                <span
+                  class="inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold"
+                  :class="
+                    i === 0
+                      ? 'bg-yellow-500/20 text-yellow-500'
+                      : i === 1
+                        ? 'bg-gray-300/20 text-gray-300'
+                        : i === 2
+                          ? 'bg-orange-400/20 text-orange-400'
+                          : 'bg-surface-hover text-text-muted'
+                  "
+                  >{{ i + 1 }}</span
+                >
+              </td>
               <td class="px-5 py-3 font-bold">
                 <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
-                  {{ trend.name }}
+                  <TechIcon :name="trend.name" size="sm" /> {{ trend.name }}
                 </NuxtLink>
               </td>
               <td class="px-5 py-3">{{ Math.round(trend.mentions) }}</td>
@@ -196,11 +218,28 @@
             :to="`/trends/${trend.name}`"
             class="glass-card flex items-center justify-between p-4"
           >
-            <div>
-              <p class="text-accent font-bold">{{ i + 1 }}. {{ trend.name }}</p>
-              <p class="text-text-secondary text-xs">
-                {{ trend.mentions }} mentions · {{ trend.sources.join(', ') }}
-              </p>
+            <div class="flex items-center gap-3">
+              <span
+                class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+                :class="
+                  i === 0
+                    ? 'bg-yellow-500/20 text-yellow-500'
+                    : i === 1
+                      ? 'bg-gray-300/20 text-gray-300'
+                      : i === 2
+                        ? 'bg-orange-400/20 text-orange-400'
+                        : 'bg-surface-hover text-text-muted'
+                "
+                >{{ i + 1 }}</span
+              >
+              <div>
+                <p class="text-accent flex items-center gap-1.5 font-bold">
+                  <TechIcon :name="trend.name" size="sm" /> {{ trend.name }}
+                </p>
+                <p class="text-text-secondary text-xs">
+                  {{ trend.mentions }} mentions · {{ trend.sources.join(', ') }}
+                </p>
+              </div>
             </div>
             <div class="text-right">
               <p class="font-semibold">{{ Math.round(trend.score).toLocaleString() }}</p>
@@ -235,8 +274,11 @@
           :key="p.name"
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
-          <NuxtLink :to="`/trends/${p.name}`" class="text-accent font-bold hover:underline">
-            {{ p.name }}
+          <NuxtLink
+            :to="`/trends/${p.name}`"
+            class="text-accent flex items-center gap-1.5 font-bold hover:underline"
+          >
+            <TechIcon :name="p.name" size="sm" /> {{ p.name }}
           </NuxtLink>
           <span class="bg-success/30 text-success rounded-full px-2.5 py-0.5 text-xs font-semibold">
             {{ (p.confidence * 100).toFixed(0) }}%

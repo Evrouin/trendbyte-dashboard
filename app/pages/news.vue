@@ -73,8 +73,8 @@
 
     <div v-if="filteredNews.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <a
-        v-for="item in filteredNews"
-        :key="item.url + item.collected_at"
+        v-for="(item, i) in filteredNews"
+        :key="i"
         :href="item.url"
         target="_blank"
         class="glass-card hover:bg-surface-hover flex min-w-0 flex-col justify-between overflow-hidden p-5 transition"
@@ -84,7 +84,9 @@
         </div>
         <div class="text-text-muted mt-4 flex flex-wrap items-center gap-2 text-xs">
           <span class="border-border-subtle rounded border px-1.5 py-0.5">{{ item.source }}</span>
-          <span v-if="item.name" class="text-accent">{{ item.name }}</span>
+          <span v-if="item.name" class="text-accent"
+            ><TechIcon :name="item.name" size="sm" /> {{ item.name }}</span
+          >
           <span v-if="item.stars" class="ml-auto">{{ item.stars }} pts</span>
         </div>
         <p class="text-text-muted mt-2 text-xs">{{ formatDate(item.collected_at) }}</p>
@@ -139,9 +141,6 @@ watch(
 
 const filteredNews = computed(() => {
   let items = store.news
-  if (activeSource.value !== 'all') {
-    items = items.filter((n) => n.source === activeSource.value)
-  }
   if (search.value) {
     const q = search.value.toLowerCase()
     items = items.filter(
@@ -154,8 +153,14 @@ const filteredNews = computed(() => {
   return items
 })
 
-const filterBySource = (source: string) => {
+const filterBySource = async (source: string) => {
   activeSource.value = source
+  const params: Record<string, string | number> = { limit: pageSize }
+  if (source !== 'all') params.source = source
+  if (dateRange.value.from) params.from_date = dateRange.value.from
+  if (dateRange.value.to) params.to_date = dateRange.value.to
+  store.lastFetched = {}
+  await store.fetchNews(params)
 }
 
 const selectSource = (source: string) => {
@@ -166,6 +171,7 @@ const selectSource = (source: string) => {
 const loadMore = async () => {
   const currentCount = store.news.length
   const params: Record<string, string | number> = { limit: currentCount + pageSize }
+  if (activeSource.value !== 'all') params.source = activeSource.value
   if (dateRange.value.from) params.from_date = dateRange.value.from
   if (dateRange.value.to) params.to_date = dateRange.value.to
   store.lastFetched = {}

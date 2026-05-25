@@ -16,7 +16,9 @@
       >
         <div>
           <div class="mb-3 flex items-center justify-between">
-            <span class="text-lg font-bold">{{ p.name }}</span>
+            <span class="text-lg font-bold"
+              ><TechIcon :name="p.name" size="sm" /> {{ p.name }}</span
+            >
             <span
               class="rounded-full px-2.5 py-0.5 text-xs font-bold"
               :class="confidenceColor(p.confidence)"
