@@ -256,8 +256,6 @@ const toolsItems = [
   { to: '/tools/lookup', label: 'Tech Lookup' },
   { to: '/tools/compare', label: 'Compare' },
   { to: '/tools/watchlist', label: 'Watchlist' },
-  { to: '/tools/correlations', label: 'Correlation Finder' },
-  { to: '/tools/predict', label: 'Category Predictor' },
   { to: '', label: 'Export Trends', action: true },
 ]
 
