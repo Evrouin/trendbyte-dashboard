@@ -47,7 +47,10 @@
     <section v-if="weekly" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Weekly Recap</h2>
       <div class="grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
-        <div class="glass-card min-w-0 overflow-hidden p-4">
+        <div
+          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+          data-tooltip="Most mentioned tech this week"
+        >
           <p class="text-text-secondary text-xs font-medium">Most Discussed</p>
           <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
             <TechIcon :name="weekly.most_discussed?.name || ''" size="sm" />
@@ -55,7 +58,10 @@
           </p>
           <p class="text-text-muted text-xs">{{ weekly.most_discussed?.mentions }} mentions</p>
         </div>
-        <div class="glass-card min-w-0 overflow-hidden p-4">
+        <div
+          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+          data-tooltip="Emerging tech with fastest growth"
+        >
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
           <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
             <TechIcon :name="weekly.rising_tool?.name || ''" size="sm" />
@@ -63,7 +69,10 @@
           </p>
           <p class="text-success text-xs">+{{ formatGrowth(weekly.rising_tool?.growth_pct) }}%</p>
         </div>
-        <div class="glass-card min-w-0 overflow-hidden p-4">
+        <div
+          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+          data-tooltip="Overall community sentiment this week"
+        >
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
           <div class="mt-1 flex items-center gap-1.5">
             <TechIcon :name="weekly.community_vibe?.top_positive || ''" size="sm" />
@@ -85,7 +94,10 @@
             {{ formatVibe(weekly.community_vibe?.average_sentiment) }}
           </p>
         </div>
-        <div class="glass-card min-w-0 overflow-hidden p-4">
+        <div
+          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+          data-tooltip="Tech losing momentum this week"
+        >
           <p class="text-text-secondary text-xs font-medium">Faded</p>
           <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
             <TechIcon :name="weekly.faded?.name || ''" size="sm" /> {{ weekly.faded?.name }}
