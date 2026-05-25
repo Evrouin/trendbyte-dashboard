@@ -10,6 +10,8 @@
         placeholder="Add a technology..."
         class="border-border bg-surface text-text focus:border-accent w-full rounded-lg border px-4 py-2 text-sm outline-none"
         @focus="showSuggestions = true"
+        @input="showSuggestions = true"
+        @blur="setTimeout(() => (showSuggestions = false), 200)"
       />
       <div
         v-if="showSuggestions && suggestions.length"
