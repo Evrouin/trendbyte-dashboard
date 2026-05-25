@@ -42,7 +42,7 @@
       <section
         v-if="data.history.length"
         class="glass-card p-6 lg:col-span-2"
-        style="height: 300px"
+        style="height: 350px"
       >
         <div class="mb-3 flex gap-1">
           <button
@@ -59,7 +59,12 @@
         </div>
         <ClientOnly>
           <LineChart
-            :labels="data.history.map((h) => new Date(h.calculated_at).toLocaleDateString())"
+            :labels="
+              data.history.map((h) => {
+                const d = new Date(h.calculated_at)
+                return `${d.getDate()} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()]}`
+              })
+            "
             :values="data.history.map((h) => Math.round(h.score))"
             title="Score Over Time"
           />

@@ -48,7 +48,7 @@ const chartOptions = {
   },
   scales: {
     x: {
-      ticks: { color: '#8b949e', font: { size: 11 } },
+      ticks: { color: '#8b949e', font: { size: 10 }, maxRotation: 45, padding: 4 },
       grid: { display: false },
       border: { color: 'rgba(88, 166, 255, 0.1)' },
     },
