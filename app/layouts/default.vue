@@ -182,7 +182,7 @@
         >
           {{ link.label }}
         </NuxtLink>
-        <span class="text-text-muted mt-2 px-2 text-xs font-semibold uppercase">Tools</span>
+        <span class="text-text-muted mt-2 px-2 text-xs font-semibold">Tools</span>
         <template v-for="item in toolsItems" :key="item.label">
           <NuxtLink
             v-if="!item.action"
