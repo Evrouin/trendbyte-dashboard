@@ -65,11 +65,24 @@
         </div>
         <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
-          <p class="mt-1 truncate text-lg font-bold">
+          <div class="mt-1 flex items-center gap-1.5">
+            <TechIcon :name="weekly.community_vibe?.top_positive || ''" size="sm" />
+            <span class="truncate text-sm font-bold">{{
+              weekly.community_vibe?.top_positive
+            }}</span>
+          </div>
+          <div
+            class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-500"
+          >
+            <div
+              class="h-full w-1.5 rounded-full bg-white shadow"
+              :style="{
+                marginLeft: `${(((weekly.community_vibe?.average_sentiment || 0) + 1) / 2) * 100}%`,
+              }"
+            />
+          </div>
+          <p class="text-text-muted mt-1 text-[10px]">
             {{ formatVibe(weekly.community_vibe?.average_sentiment) }}
-          </p>
-          <p class="text-text-muted truncate text-xs">
-            {{ weekly.community_vibe?.top_positive }} leading
           </p>
         </div>
         <div class="glass-card min-w-0 overflow-hidden p-4">
