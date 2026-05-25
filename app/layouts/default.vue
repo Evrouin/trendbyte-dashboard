@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen flex-col">
+  <div class="flex min-h-screen min-w-0 flex-col overflow-x-hidden">
     <nav class="border-border border-b px-6 py-4">
       <div class="mx-auto flex max-w-7xl items-center justify-between">
         <NuxtLink

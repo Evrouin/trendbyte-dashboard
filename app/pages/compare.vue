@@ -3,7 +3,7 @@
     <h1 class="mb-2 text-3xl font-extrabold">Compare Trends</h1>
     <p class="text-text-secondary mb-6">Select trends to compare their score history.</p>
 
-    <div class="mb-6 flex flex-wrap gap-2">
+    <div class="mb-6 flex max-w-full flex-wrap gap-2 overflow-hidden">
       <button
         v-for="name in availableTrends"
         :key="name"
@@ -20,7 +20,7 @@
       </button>
     </div>
 
-    <div v-if="datasets.length" class="glass-card p-6" style="height: 400px">
+    <div v-if="datasets.length" class="glass-card min-h-[300px] overflow-hidden p-6 md:h-[400px]">
       <ClientOnly>
         <ComparisonChart :datasets="datasets" />
       </ClientOnly>

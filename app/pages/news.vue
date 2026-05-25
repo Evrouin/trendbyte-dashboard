@@ -33,7 +33,7 @@
         </button>
         <div
           v-if="sourceDropdownOpen"
-          class="glass-card border-border absolute top-full left-0 z-40 mt-1 max-h-60 w-44 overflow-y-auto border shadow-lg"
+          class="glass-card border-border absolute top-full right-0 z-40 mt-1 max-h-60 w-44 overflow-y-auto border shadow-lg"
         >
           <button
             v-for="s in sources"
@@ -71,13 +71,13 @@
 
     <ErrorState v-if="error" message="Failed to load news" />
 
-    <div v-if="filteredNews.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div v-if="filteredNews.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <a
         v-for="item in filteredNews"
         :key="item.url + item.collected_at"
         :href="item.url"
         target="_blank"
-        class="glass-card hover:bg-surface-hover flex flex-col justify-between p-5 transition"
+        class="glass-card hover:bg-surface-hover flex min-w-0 flex-col justify-between overflow-hidden p-5 transition"
       >
         <div>
           <p class="line-clamp-3 leading-snug font-medium">{{ item.description }}</p>

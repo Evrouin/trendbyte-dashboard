@@ -5,11 +5,14 @@
 
     <ErrorState v-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
-    <div v-else-if="store.predictions.length" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      v-else-if="store.predictions.length"
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+    >
       <div
         v-for="p in store.predictions"
         :key="p.name"
-        class="glass-card flex flex-col justify-between p-5"
+        class="glass-card flex min-w-0 flex-col justify-between overflow-hidden p-5"
       >
         <div>
           <div class="mb-3 flex items-center justify-between">

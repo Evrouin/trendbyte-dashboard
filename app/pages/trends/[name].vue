@@ -38,11 +38,10 @@
       </span>
     </div>
 
-    <div class="mb-10 grid gap-6 lg:grid-cols-3">
+    <div class="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
       <section
         v-if="data.history.length"
-        class="glass-card p-6 lg:col-span-2"
-        style="height: 350px"
+        class="glass-card min-h-[250px] overflow-hidden p-6 md:h-[350px] lg:col-span-2"
       >
         <div class="mb-3 flex gap-1">
           <button
@@ -73,8 +72,7 @@
 
       <section
         v-if="sourceBreakdown.labels.length"
-        class="glass-card flex flex-col p-6"
-        style="height: 300px"
+        class="glass-card flex min-h-[250px] flex-col overflow-hidden p-6 md:h-[300px]"
       >
         <h3 class="text-text-secondary mb-2 text-xs font-semibold uppercase">Source Breakdown</h3>
         <ClientOnly>

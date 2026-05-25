@@ -43,41 +43,46 @@
     <!-- Weekly Recap -->
     <section v-if="weekly" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Weekly Recap</h2>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div class="glass-card p-4">
+      <div class="grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
+        <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Most Discussed</p>
-          <p class="mt-1 text-lg font-bold">{{ weekly.most_discussed?.name }}</p>
+          <p class="mt-1 truncate text-lg font-bold">{{ weekly.most_discussed?.name }}</p>
           <p class="text-text-muted text-xs">{{ weekly.most_discussed?.mentions }} mentions</p>
         </div>
-        <div class="glass-card p-4">
+        <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
-          <p class="mt-1 text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
+          <p class="mt-1 truncate text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
           <p class="text-success text-xs">+{{ formatGrowth(weekly.rising_tool?.growth_pct) }}%</p>
         </div>
-        <div class="glass-card p-4">
+        <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
-          <p class="mt-1 text-lg font-bold">
+          <p class="mt-1 truncate text-lg font-bold">
             {{ formatVibe(weekly.community_vibe?.average_sentiment) }}
           </p>
-          <p class="text-text-muted text-xs">{{ weekly.community_vibe?.top_positive }} leading</p>
+          <p class="text-text-muted truncate text-xs">
+            {{ weekly.community_vibe?.top_positive }} leading
+          </p>
         </div>
-        <div class="glass-card p-4">
+        <div class="glass-card min-w-0 overflow-hidden p-4">
           <p class="text-text-secondary text-xs font-medium">Faded</p>
-          <p class="mt-1 text-lg font-bold">{{ weekly.faded?.name }}</p>
+          <p class="mt-1 truncate text-lg font-bold">{{ weekly.faded?.name }}</p>
           <p class="text-red text-xs">{{ formatGrowth(weekly.faded?.growth_pct) }}%</p>
         </div>
       </div>
     </section>
 
     <!-- Stats row -->
-    <section v-if="!store.stats" class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <section
+      v-if="!store.stats"
+      class="mb-10 grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4"
+    >
       <Skeleton h="h-24" />
       <Skeleton h="h-24" />
       <Skeleton h="h-24" />
       <Skeleton h="h-24" />
     </section>
 
-    <section v-else class="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+    <section v-else class="mb-10 grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
       <NuxtLink
         to="/news"
         class="glass-card tooltip hover:bg-surface-hover p-6 transition"

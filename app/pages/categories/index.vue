@@ -5,8 +5,12 @@
 
     <ErrorState v-if="error" message="Failed to load categories" :retry="true" @retry="refresh" />
 
-    <div v-else-if="data?.categories" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div v-for="cat in data.categories" :key="cat.category" class="glass-card p-6">
+    <div v-else-if="data?.categories" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        v-for="cat in data.categories"
+        :key="cat.category"
+        class="glass-card min-w-0 overflow-hidden p-6"
+      >
         <div class="mb-4 flex items-center justify-between">
           <h3 class="text-lg font-bold">{{ formatCategory(cat.category) }}</h3>
           <span
