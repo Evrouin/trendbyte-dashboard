@@ -70,6 +70,46 @@
           >
             {{ link.label }}
           </NuxtLink>
+          <div class="relative" @mouseenter="toolsOpen = true" @mouseleave="toolsOpen = false">
+            <button
+              class="transition"
+              :class="
+                isActive('/tools')
+                  ? 'text-accent font-semibold'
+                  : 'text-text-secondary hover:text-text'
+              "
+              @click="toolsOpen = !toolsOpen"
+            >
+              Tools
+            </button>
+            <div
+              v-if="toolsOpen"
+              class="glass-card border-border absolute top-full right-0 z-40 mt-2 w-48 border shadow-lg"
+            >
+              <template v-for="item in toolsItems" :key="item.label">
+                <NuxtLink
+                  v-if="!item.action"
+                  :to="item.to"
+                  class="block w-full px-4 py-2 text-left text-sm transition"
+                  :class="
+                    isActive(item.to)
+                      ? 'text-accent bg-accent/10'
+                      : 'text-text-secondary hover:bg-surface-hover hover:text-text'
+                  "
+                  @click="toolsOpen = false"
+                >
+                  {{ item.label }}
+                </NuxtLink>
+                <button
+                  v-else
+                  class="text-text-secondary hover:bg-surface-hover hover:text-text w-full px-4 py-2 text-left text-sm transition"
+                  @click="handleToolClick(item)"
+                >
+                  {{ item.label }}
+                </button>
+              </template>
+            </div>
+          </div>
           <button
             class="text-text-secondary hover:text-accent transition"
             title="Toggle theme"
@@ -128,6 +168,27 @@
         >
           {{ link.label }}
         </NuxtLink>
+        <span class="text-text-muted mt-2 px-2 text-xs font-semibold uppercase">Tools</span>
+        <template v-for="item in toolsItems" :key="item.label">
+          <NuxtLink
+            v-if="!item.action"
+            :to="item.to"
+            class="rounded px-2 py-1 transition"
+            :class="
+              isActive(item.to) ? 'text-accent bg-surface font-semibold' : 'text-text-secondary'
+            "
+            @click="menuOpen = false"
+          >
+            {{ item.label }}
+          </NuxtLink>
+          <button
+            v-else
+            class="text-text-secondary rounded px-2 py-1 text-left transition"
+            @click="handleToolClick(item)"
+          >
+            {{ item.label }}
+          </button>
+        </template>
       </div>
     </nav>
 
@@ -156,12 +217,16 @@
         </div>
       </div>
     </footer>
+
+    <ExportModal v-model="showExportModal" />
   </div>
 </template>
 
 <script setup lang="ts">
 const route = useRoute()
 const menuOpen = ref(false)
+const toolsOpen = ref(false)
+const showExportModal = ref(false)
 const { isDark, toggle: toggleTheme, init: initTheme } = useTheme()
 onMounted(() => initTheme())
 
@@ -169,13 +234,29 @@ const navLinks = [
   { to: '/', label: 'Overview' },
   { to: '/news', label: 'News' },
   { to: '/trends', label: 'Trends' },
-  { to: '/compare', label: 'Compare' },
   { to: '/predictions', label: 'Predictions' },
   { to: '/categories', label: 'Categories' },
+]
+
+const toolsItems = [
+  { to: '/tools/lookup', label: 'Tech Lookup' },
+  { to: '/tools/compare', label: 'Compare' },
+  { to: '/tools/watchlist', label: 'Watchlist' },
+  { to: '/tools/correlations', label: 'Correlation Finder' },
+  { to: '/tools/predict', label: 'Category Predictor' },
+  { to: '', label: 'Export Trends', action: true },
 ]
 
 const isActive = (path: string) => {
   if (path === '/') return route.path === '/'
   return route.path.startsWith(path)
+}
+
+const handleToolClick = (item: (typeof toolsItems)[number]) => {
+  if (item.action) {
+    showExportModal.value = true
+    toolsOpen.value = false
+    menuOpen.value = false
+  }
 }
 </script>
