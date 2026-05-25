@@ -31,13 +31,11 @@
     <div class="text-text-secondary mb-8 flex flex-wrap items-center gap-4 text-sm">
       <span>Score: {{ Math.round(data.trend.score).toLocaleString() }}</span>
       <span>Sources: {{ data.trend.sources.join(', ') }}</span>
-      <span
-        v-if="lifecycle"
-        class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-        :class="lifecycleClass"
-      >
-        {{ lifecycle.phase }}
-      </span>
+      <TrendBadges
+        :sources="data.trend.sources"
+        :growth-pct="data.trend.growth_pct"
+        :lifecycle="lifecycle?.phase"
+      />
     </div>
 
     <div class="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
