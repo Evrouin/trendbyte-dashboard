@@ -127,7 +127,7 @@ useHead({ title: 'Tech Lookup — TrendByte' })
 const config = useRuntimeConfig()
 const baseUrl = config.public.apiUrl
 const store = useTrendsStore()
-await store.fetchTrends(30, 30)
+await store.fetchTrends(365, 100)
 
 const query = ref('')
 const showSuggestions = ref(false)
