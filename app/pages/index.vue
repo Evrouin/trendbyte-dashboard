@@ -294,11 +294,14 @@
     </section>
 
     <!-- Rising Stars -->
-    <section v-if="predictions?.predictions?.length">
-      <h2 class="mb-4 text-xl font-bold">Rising Stars</h2>
+    <section v-if="risingStars.length">
+      <div class="mb-4 flex items-center justify-between">
+        <h2 class="text-xl font-bold">Rising Stars</h2>
+        <NuxtLink to="/predictions" class="text-accent text-sm hover:underline">See all →</NuxtLink>
+      </div>
       <div class="grid gap-3">
         <div
-          v-for="p in predictions.predictions"
+          v-for="p in risingStars"
           :key="p.name"
           class="glass-card flex items-center gap-4 px-5 py-4"
         >
@@ -351,11 +354,15 @@ const formatRelative = (date: string) => {
 const store = useTrendsStore()
 await store.fetchStats()
 await store.fetchTrends(7, 10)
-await store.fetchPredictions(5)
+
+const { data: risingData } = await useFetch<{ predictions: any[] }>(
+  `${config.public.apiUrl}/api/predictions`,
+  { params: { limit: 5 }, lazy: true },
+)
+const risingStars = computed(() => risingData.value?.predictions || [])
 
 const stats = computed(() => store.stats)
 const trends = computed(() => ({ trends: store.trends }))
-const predictions = computed(() => ({ predictions: store.predictions }))
 const trendsError = ref(false)
 
 // Content card data
