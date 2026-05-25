@@ -27,7 +27,7 @@
             v-if="daily.stat?.delta"
             class="bg-success/20 text-success rounded-full px-2 py-0.5 text-xs font-semibold"
           >
-            {{ daily.stat.delta }}
+            Score {{ Number(daily.stat.delta).toLocaleString() }}
           </span>
         </div>
         <p class="text-text-muted mt-4 text-sm">{{ daily.takeaway }}</p>
@@ -52,21 +52,19 @@
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
           <p class="mt-1 text-lg font-bold">{{ weekly.rising_tool?.name }}</p>
-          <p class="text-success text-xs">
-            +{{ Math.round(weekly.rising_tool?.growth_pct || 0) }}%
-          </p>
+          <p class="text-success text-xs">+{{ formatGrowth(weekly.rising_tool?.growth_pct) }}%</p>
         </div>
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
           <p class="mt-1 text-lg font-bold">
-            {{ ((weekly.community_vibe?.average_sentiment || 0) * 100).toFixed(0) }}%
+            {{ formatVibe(weekly.community_vibe?.average_sentiment) }}
           </p>
-          <p class="text-text-muted text-xs">positive</p>
+          <p class="text-text-muted text-xs">{{ weekly.community_vibe?.top_positive }} leading</p>
         </div>
         <div class="glass-card p-4">
           <p class="text-text-secondary text-xs font-medium">Faded</p>
           <p class="mt-1 text-lg font-bold">{{ weekly.faded?.name }}</p>
-          <p class="text-red text-xs">{{ Math.round(weekly.faded?.growth_pct || 0) }}%</p>
+          <p class="text-red text-xs">{{ formatGrowth(weekly.faded?.growth_pct) }}%</p>
         </div>
       </div>
     </section>
@@ -252,6 +250,19 @@ import { useTrendsStore } from '~/stores/trends'
 useHead({ title: 'Overview — TrendByte' })
 
 const config = useRuntimeConfig()
+
+const formatGrowth = (val: number | undefined) => {
+  if (!val) return '0'
+  const clamped = Math.max(-999, Math.min(999, Math.round(val)))
+  return clamped > 0 ? `${clamped}` : `${clamped}`
+}
+
+const formatVibe = (val: number | undefined) => {
+  if (!val) return 'Neutral'
+  if (val > 0.2) return 'Positive'
+  if (val < -0.2) return 'Negative'
+  return 'Neutral'
+}
 
 const formatRelative = (date: string) => {
   const diff = Date.now() - new Date(date).getTime()
