@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="mb-8 flex items-center justify-between gap-4">
+    <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
         <h1 class="text-3xl font-extrabold">Tech Lookup</h1>
         <p class="text-text-secondary mt-1">Instant insights on any technology.</p>
       </div>
-      <div class="relative w-64 shrink-0">
+      <div class="relative w-full md:w-64 md:shrink-0">
         <input
           v-model="query"
           type="text"
