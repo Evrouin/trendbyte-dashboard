@@ -16,7 +16,7 @@
     <section v-if="daily" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Daily Signal Drop</h2>
       <NuxtLink
-        :to="`/trends/${daily.trend_name}`"
+        :to="trendPath(daily.trend_name)"
         class="glass-card border-accent/30 hover:border-accent/50 relative block overflow-hidden border p-8 transition"
       >
         <p class="text-text-secondary mb-2 text-sm font-medium tracking-wide uppercase">
@@ -216,7 +216,7 @@
                 >
               </td>
               <td class="px-5 py-3 font-bold">
-                <NuxtLink :to="`/trends/${trend.name}`" class="text-accent hover:underline">
+                <NuxtLink :to="trendPath(trend.name)" class="text-accent hover:underline">
                   <TechIcon :name="trend.name" size="sm" /> {{ trend.name }}
                 </NuxtLink>
               </td>
@@ -243,7 +243,7 @@
           <NuxtLink
             v-for="(trend, i) in trends.trends.slice(0, 5)"
             :key="trend.name"
-            :to="`/trends/${trend.name}`"
+            :to="trendPath(trend.name)"
             class="glass-card flex items-center justify-between p-4"
           >
             <div class="flex items-center gap-3">
@@ -303,7 +303,7 @@
           class="border-border flex flex-wrap items-center gap-2 border-b px-5 py-4 last:border-0 md:gap-4"
         >
           <NuxtLink
-            :to="`/trends/${p.name}`"
+            :to="trendPath(p.name)"
             class="text-accent flex items-center gap-1.5 font-bold hover:underline"
           >
             <TechIcon :name="p.name" size="sm" /> {{ p.name }}

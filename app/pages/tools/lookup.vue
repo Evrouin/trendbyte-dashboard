@@ -92,7 +92,7 @@
         </div>
 
         <NuxtLink
-          :to="`/trends/${detail.trend.name}`"
+          :to="trendPath(detail.trend.name)"
           class="text-accent inline-block text-sm font-medium hover:underline"
         >
           View full details →

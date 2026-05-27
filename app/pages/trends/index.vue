@@ -90,7 +90,7 @@
             </td>
             <td class="px-5 py-3 font-bold">
               <NuxtLink
-                :to="`/trends/${trend.name}`"
+                :to="trendPath(trend.name)"
                 class="text-accent flex items-center gap-2 hover:underline"
               >
                 <TechIcon :name="trend.name" size="sm" />
@@ -120,7 +120,7 @@
         <NuxtLink
           v-for="(trend, i) in filteredTrends"
           :key="trend.name"
-          :to="`/trends/${trend.name}`"
+          :to="trendPath(trend.name)"
           class="glass-card flex items-center justify-between p-4"
         >
           <div class="flex items-center gap-3">

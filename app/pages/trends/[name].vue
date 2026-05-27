@@ -114,7 +114,7 @@
         <NuxtLink
           v-for="r in data.related"
           :key="r.name"
-          :to="`/trends/${r.name}`"
+          :to="trendPath(r.name)"
           class="glass-card hover:bg-surface-hover flex items-center gap-1.5 px-4 py-2 text-sm transition"
         >
           <TechIcon :name="r.name" size="sm" />
