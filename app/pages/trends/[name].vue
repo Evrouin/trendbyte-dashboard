@@ -140,6 +140,7 @@ const sanitizeParam = (param: string | string[] | undefined): string => {
     .replace(/<[^>]*>/g, '')
     .trim()
     .slice(0, 200)
+    .replace(/#/g, '%23')
 }
 
 const safeName = sanitizeParam(route.params.name)
