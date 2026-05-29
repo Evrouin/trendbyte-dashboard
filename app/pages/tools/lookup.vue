@@ -157,9 +157,17 @@ const hideSuggestions = () => {
   setTimeout(() => (showSuggestions.value = false), 200)
 }
 
+const toSlug = (name: string) =>
+  name
+    .replace(/\+\+/g, 'plusplus')
+    .replace(/#/g, 'sharp')
+    .replace(/\./g, '-')
+    .replace(/\s+/g, '-')
+    .toLowerCase()
+
 const select = async (name: string) => {
   query.value = name
   showSuggestions.value = false
-  detail.value = await fetchWithHmac<any>(`${baseUrl}/api/trends/${name}`)
+  detail.value = await fetchWithHmac<any>(`${baseUrl}/api/trends/${toSlug(name)}`)
 }
 </script>

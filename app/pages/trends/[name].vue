@@ -38,6 +38,12 @@
       />
     </div>
 
+    <p class="text-text-secondary mb-8 text-sm">
+      {{ data.trend.name }} has {{ data.trend.mentions }} mentions across
+      {{ data.trend.sources.length }} sources with a score of
+      {{ Math.round(data.trend.score).toLocaleString() }}
+    </p>
+
     <div class="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
       <section
         v-if="data.history.length"
@@ -94,7 +100,19 @@
           class="glass-card hover:bg-surface-hover flex items-start gap-4 px-5 py-4 transition"
         >
           <div class="flex-1">
-            <p class="leading-snug font-medium">{{ post.description || post.url }}</p>
+            <p class="leading-snug font-medium">{{ post.name || post.description || post.url }}</p>
+            <p
+              v-if="post.description && post.description.startsWith('http')"
+              class="text-accent mt-1 truncate text-xs"
+            >
+              {{ post.description }}
+            </p>
+            <p
+              v-else-if="post.description && post.description !== post.name"
+              class="text-text-secondary mt-1 line-clamp-1 text-xs"
+            >
+              {{ post.description }}
+            </p>
             <div class="text-text-muted mt-2 flex items-center gap-3 text-xs">
               <span class="border-border-subtle rounded border px-1.5 py-0.5">{{
                 post.source
@@ -140,10 +158,11 @@ const sanitizeParam = (param: string | string[] | undefined): string => {
     .replace(/<[^>]*>/g, '')
     .trim()
     .slice(0, 200)
-    .replace(/#/g, '%23')
 }
 
 const safeName = sanitizeParam(route.params.name)
+
+useHead({ title: `${safeName} — TrendByte` })
 
 const granularity = ref('weekly')
 
@@ -168,6 +187,15 @@ const { data: lifecycle } = await useFetch<{ phase: string; momentum: number }>(
   `${config.public.apiUrl}/api/trends/${safeName}/lifecycle`,
   { lazy: true },
 )
+
+useSeoMeta({
+  title: () =>
+    data.value?.trend ? `${data.value.trend.name} — TrendByte` : `${safeName} — TrendByte`,
+  description: () =>
+    data.value?.trend
+      ? `${data.value.trend.name} has a score of ${Math.round(data.value.trend.score)} across ${data.value.trend.sources.join(', ')}.`
+      : `Trend details for ${safeName}`,
+})
 
 const lifecycleClass = computed(() => {
   const phase = lifecycle.value?.phase

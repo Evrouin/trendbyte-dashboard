@@ -4,6 +4,7 @@ export async function signRequest(
   secret: string,
 ): Promise<{ signature: string; timestamp: string }> {
   const timestamp = Math.floor(Date.now() / 1000).toString()
+  if (!secret) return { signature: '', timestamp }
   const message = `${timestamp}${method.toUpperCase()}${path}`
 
   const encoder = new TextEncoder()

@@ -336,7 +336,7 @@
 import { formatSignal } from '~/utils/formatSignal'
 import { useTrendsStore } from '~/stores/trends'
 
-useHead({ title: 'Overview — TrendByte' })
+useHead({ title: 'Dashboard — TrendByte' })
 
 const config = useRuntimeConfig()
 
@@ -363,26 +363,25 @@ const formatRelative = (date: string) => {
 }
 
 const store = useTrendsStore()
-await store.fetchStats()
-await store.fetchTrends(7, 10)
+await Promise.all([store.fetchStats(), store.fetchTrends(7, 10)])
 
 const { data: risingData } = await useFetch<{ predictions: any[] }>(
   `${config.public.apiUrl}/api/predictions`,
   { params: { limit: 5 }, lazy: true },
+)
+const { data: daily } = await useFetch<Record<string, any>>(
+  `${config.public.apiUrl}/api/content/daily`,
+  { lazy: true },
+)
+const { data: weekly } = await useFetch<Record<string, any>>(
+  `${config.public.apiUrl}/api/content/weekly`,
+  { lazy: true },
 )
 const risingStars = computed(() => risingData.value?.predictions || [])
 
 const stats = computed(() => store.stats)
 const trends = computed(() => ({ trends: store.trends }))
 const trendsError = ref(false)
-
-// Content card data
-const { data: daily } = await useFetch<Record<string, any>>(
-  `${config.public.apiUrl}/api/content/daily`,
-)
-const { data: weekly } = await useFetch<Record<string, any>>(
-  `${config.public.apiUrl}/api/content/weekly`,
-)
 
 const { show: showToast } = useToast()
 

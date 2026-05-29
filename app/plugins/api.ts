@@ -10,7 +10,7 @@ export default defineNuxtPlugin(() => {
       const url = typeof request === 'string' ? request : request.toString()
       if (!url.startsWith(apiUrl)) return
 
-      const pathname = decodeURIComponent(new URL(url).pathname)
+      const pathname = new URL(url).pathname
       const method = ((options.method as string) || 'GET').toUpperCase()
       const { signature, timestamp } = await signRequest(method, pathname, secret)
 

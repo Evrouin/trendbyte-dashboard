@@ -21,23 +21,33 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'TrendByte Dashboard',
+      title: 'TrendByte — Tech Trend Intelligence',
       meta: [
-        { name: 'description', content: 'Tech trend intelligence dashboard' },
         {
-          'http-equiv': 'Content-Security-Policy',
+          name: 'description',
           content:
-            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://trendbyte.evrouin.com; font-src 'self' https://fonts.gstatic.com;",
+            'Real-time tech trend intelligence dashboard. Track emerging technologies, compare frameworks, and predict the next big thing.',
         },
+        { property: 'og:title', content: 'TrendByte — Tech Trend Intelligence' },
+        {
+          property: 'og:description',
+          content:
+            'Real-time tech trend intelligence dashboard. Track emerging technologies, compare frameworks, and predict the next big thing.',
+        },
+        { property: 'og:image', content: 'https://trendbytedashboard.evrouin.com/og.png' },
+        { property: 'og:url', content: 'https://trendbytedashboard.evrouin.com' },
+        { name: 'twitter:card', content: 'summary_large_image' },
       ],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'canonical', href: 'https://trendbytedashboard.evrouin.com' },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
         },
       ],
     },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
 
   typescript: {
