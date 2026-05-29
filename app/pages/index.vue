@@ -42,6 +42,15 @@
         </span>
       </NuxtLink>
     </section>
+    <section v-else class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Daily Signal Drop</h2>
+      <div class="glass-card border-accent/30 animate-pulse border p-8">
+        <div class="bg-surface-hover mb-3 h-4 w-32 rounded" />
+        <div class="bg-surface-hover mb-4 h-8 w-3/4 rounded" />
+        <div class="bg-surface-hover mb-4 h-10 w-24 rounded" />
+        <div class="bg-surface-hover h-4 w-2/3 rounded" />
+      </div>
+    </section>
 
     <!-- Weekly Recap -->
     <section v-if="weekly" class="mb-10">
@@ -103,6 +112,16 @@
             <TechIcon :name="weekly.faded?.name || ''" size="sm" /> {{ weekly.faded?.name }}
           </p>
           <p class="text-red text-xs">{{ formatGrowth(weekly.faded?.growth_pct) }}%</p>
+        </div>
+      </div>
+    </section>
+    <section v-else class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Weekly Recap</h2>
+      <div class="grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
+        <div v-for="n in 4" :key="n" class="glass-card animate-pulse p-4">
+          <div class="bg-surface-hover mb-2 h-3 w-20 rounded" />
+          <div class="bg-surface-hover mb-1 h-5 w-16 rounded" />
+          <div class="bg-surface-hover h-3 w-24 rounded" />
         </div>
       </div>
     </section>
