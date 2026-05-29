@@ -9,10 +9,11 @@
       v-else-if="store.predictions.length"
       class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
     >
-      <div
+      <NuxtLink
         v-for="p in store.predictions"
         :key="p.name"
-        class="glass-card flex min-w-0 flex-col justify-between overflow-hidden p-5"
+        :to="trendPath(p.name)"
+        class="glass-card hover:border-accent/30 flex min-w-0 flex-col justify-between overflow-hidden p-5 transition"
       >
         <div>
           <div class="mb-3 flex items-center justify-between">
@@ -38,11 +39,8 @@
         </div>
         <div class="text-text-muted mt-4 flex items-center justify-between text-xs">
           <span>{{ new Date(p.predicted_at).toLocaleDateString() }}</span>
-          <a v-if="p.url" :href="p.url" target="_blank" class="text-accent hover:underline">
-            Source
-          </a>
         </div>
-      </div>
+      </NuxtLink>
     </div>
 
     <div v-else class="glass-card p-8 text-center">

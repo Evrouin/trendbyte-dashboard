@@ -39,16 +39,18 @@
           class="border-border bg-surface relative rounded-lg border p-4"
         >
           <button
-            class="text-text-muted hover:text-red absolute top-3 right-3 text-lg"
-            @click="watchlist.remove(name)"
+            class="text-text-muted hover:text-red absolute top-3 right-3 z-10 text-lg"
+            @click.prevent="watchlist.remove(name)"
           >
             ×
           </button>
-          <div class="mb-2 flex items-center gap-2">
-            <TechIcon :name="name" size="md" />
-            <span class="font-bold">{{ name }}</span>
-          </div>
-          <WatchlistCard :name="name" />
+          <NuxtLink :to="trendPath(name)" class="block">
+            <div class="mb-2 flex items-center gap-2">
+              <TechIcon :name="name" size="md" />
+              <span class="font-bold">{{ name }}</span>
+            </div>
+            <WatchlistCard :name="name" />
+          </NuxtLink>
         </div>
       </div>
       <div v-else class="border-border bg-surface rounded-lg border p-8 text-center">
