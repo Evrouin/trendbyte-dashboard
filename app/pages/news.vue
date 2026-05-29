@@ -98,7 +98,10 @@
       </a>
     </div>
 
-    <div v-if="filteredNews.length >= pageSize" class="mt-6 text-center">
+    <div
+      v-if="store.news.length >= pageSize && store.news.length % pageSize === 0"
+      class="mt-6 text-center"
+    >
       <button
         class="border-border text-text-secondary hover:border-accent hover:text-accent rounded-lg border px-4 py-2 text-sm transition"
         @click="loadMore"
