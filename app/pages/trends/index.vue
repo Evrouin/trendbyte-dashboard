@@ -61,9 +61,33 @@
           <tr>
             <th class="px-5 py-3"></th>
             <th class="px-5 py-3 font-semibold">Name</th>
-            <th class="px-5 py-3 font-semibold">Mentions</th>
-            <th class="px-5 py-3 font-semibold">Score</th>
-            <th class="px-5 py-3 font-semibold">Growth</th>
+            <th
+              class="cursor-pointer px-5 py-3 font-semibold select-none"
+              @click="toggleSort('mentions')"
+            >
+              Mentions
+              <span v-if="sortKey === 'mentions'" class="text-accent">{{
+                sortDir === 'asc' ? '↑' : '↓'
+              }}</span>
+            </th>
+            <th
+              class="cursor-pointer px-5 py-3 font-semibold select-none"
+              @click="toggleSort('score')"
+            >
+              Score
+              <span v-if="sortKey === 'score'" class="text-accent">{{
+                sortDir === 'asc' ? '↑' : '↓'
+              }}</span>
+            </th>
+            <th
+              class="cursor-pointer px-5 py-3 font-semibold select-none"
+              @click="toggleSort('growth_pct')"
+            >
+              Growth
+              <span v-if="sortKey === 'growth_pct'" class="text-accent">{{
+                sortDir === 'asc' ? '↑' : '↓'
+              }}</span>
+            </th>
             <th class="px-5 py-3 font-semibold">Sources</th>
           </tr>
         </thead>
@@ -190,11 +214,30 @@ const {
   { params: computed(() => ({ days: selectedDays.value, limit: 30 })), lazy: true },
 )
 
+const sortKey = ref<string>('')
+const sortDir = ref<'asc' | 'desc'>('desc')
+
+const toggleSort = (key: string) => {
+  if (sortKey.value === key) {
+    sortDir.value = sortDir.value === 'desc' ? 'asc' : 'desc'
+  } else {
+    sortKey.value = key
+    sortDir.value = 'desc'
+  }
+}
+
 const filteredTrends = computed(() => {
   if (!trends.value?.trends) return []
-  if (!search.value) return trends.value.trends
-  const q = search.value.toLowerCase()
-  return trends.value.trends.filter((t) => t.name.toLowerCase().includes(q))
+  let items = trends.value.trends
+  if (search.value) {
+    const q = search.value.toLowerCase()
+    items = items.filter((t) => t.name.toLowerCase().includes(q))
+  }
+  if (sortKey.value) {
+    const dir = sortDir.value === 'asc' ? 1 : -1
+    items = [...items].sort((a: any, b: any) => (a[sortKey.value] - b[sortKey.value]) * dir)
+  }
+  return items
 })
 
 onMounted(() => {
