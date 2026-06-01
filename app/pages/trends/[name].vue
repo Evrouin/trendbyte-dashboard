@@ -90,38 +90,38 @@
     </div>
 
     <section v-if="data.posts?.length" class="mb-10">
-      <h2 class="mb-4 text-xl font-bold">Related Posts</h2>
-      <div class="grid gap-3">
+      <h2 class="mb-4 text-xl font-bold">Top Posts</h2>
+      <div class="mb-4 grid gap-4 md:grid-cols-3">
         <a
-          v-for="post in data.posts"
+          v-for="post in data.posts.slice(0, 3)"
           :key="post.url"
           :href="post.url"
           target="_blank"
-          class="glass-card hover:bg-surface-hover flex items-start gap-4 px-5 py-4 transition"
+          class="glass-card hover:border-accent/30 flex flex-col justify-between p-5 transition"
         >
-          <div class="flex-1">
-            <p class="leading-snug font-medium">{{ post.name || post.description || post.url }}</p>
-            <p
-              v-if="post.description && post.description.startsWith('http')"
-              class="text-accent mt-1 truncate text-xs"
-            >
-              {{ post.description }}
-            </p>
-            <p
-              v-else-if="post.description && post.description !== post.name"
-              class="text-text-secondary mt-1 line-clamp-1 text-xs"
-            >
-              {{ post.description }}
-            </p>
-            <div class="text-text-muted mt-2 flex items-center gap-3 text-xs">
-              <span class="border-border-subtle rounded border px-1.5 py-0.5">{{
-                post.source
-              }}</span>
-              <span v-if="post.stars">{{ post.stars }} points</span>
-              <span>{{ new Date(post.collected_at).toLocaleDateString() }}</span>
-            </div>
+          <p class="line-clamp-3 leading-snug font-medium">{{ post.description || post.url }}</p>
+          <div class="text-text-muted mt-3 flex items-center gap-2 text-xs">
+            <span class="border-border-subtle rounded border px-1.5 py-0.5">{{ post.source }}</span>
+            <span v-if="post.stars" class="font-semibold">{{ post.stars }} pts</span>
           </div>
-          <span class="text-text-muted shrink-0 text-xs">&nearr;</span>
+        </a>
+      </div>
+      <div v-if="data.posts.length > 3" class="glass-card overflow-hidden">
+        <a
+          v-for="post in data.posts.slice(3)"
+          :key="post.url"
+          :href="post.url"
+          target="_blank"
+          class="border-border hover:bg-surface-hover flex items-center gap-3 border-b px-5 py-3 transition last:border-0"
+        >
+          <span
+            class="border-border-subtle text-text-muted shrink-0 rounded border px-1.5 py-0.5 text-[10px]"
+            >{{ post.source }}</span
+          >
+          <span class="min-w-0 flex-1 truncate text-sm">{{ post.description || post.url }}</span>
+          <span v-if="post.stars" class="text-text-muted shrink-0 text-xs"
+            >{{ post.stars }} pts</span
+          >
         </a>
       </div>
     </section>
