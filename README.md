@@ -14,7 +14,7 @@ Frontend for [TrendByte](https://github.com/Evrouin/trendbyte) — a tech trend 
 | `/news`         | Latest posts with source filter, search, and date range picker               |
 | `/trends`       | Full trend list with search, date filter, and CSV export                     |
 | `/trends/:name` | Trend detail with score history, lifecycle, source breakdown, related trends |
-| `/predictions`  | Rising star predictions with confidence scores                               |
+| `/predictions`  | Rising Stars — emerging technologies with signals and detection dates                               |
 | `/categories`   | Category breakdown with per-category trends                                  |
 | `/tools`        | Tech Lookup, Compare, Watchlist, Export Trends                               |
 
