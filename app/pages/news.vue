@@ -122,14 +122,15 @@ useHead({ title: 'News — TrendByte' })
 import { useTrendsStore } from '~/stores/trends'
 
 const store = useTrendsStore()
+const today = new Date()
+const sevenDaysAgo = new Date(today.getTime() - 7 * 86400000)
+const toDateStr = (d: Date) => d.toISOString().slice(0, 10)
+
 await store.fetchStats()
 await store.fetchNews({ limit: 30, from_date: toDateStr(sevenDaysAgo), to_date: toDateStr(today) })
 
 const activeSource = ref('all')
 const search = ref('')
-const today = new Date()
-const sevenDaysAgo = new Date(today.getTime() - 7 * 86400000)
-const toDateStr = (d: Date) => d.toISOString().slice(0, 10)
 const dateRange = ref({ from: toDateStr(sevenDaysAgo), to: toDateStr(today) })
 const sourceDropdownOpen = ref(false)
 const sources = computed(() => ['all', ...(store.stats?.active_sources || []).sort()])
