@@ -108,10 +108,16 @@
           data-tooltip="Tech losing momentum this week"
         >
           <p class="text-text-secondary text-xs font-medium">Faded</p>
-          <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
-            <TechIcon :name="weekly.faded?.name || ''" size="sm" /> {{ weekly.faded?.name }}
+          <p
+            v-if="weekly.faded?.name"
+            class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold"
+          >
+            <TechIcon :name="weekly.faded.name" size="sm" /> {{ weekly.faded.name }}
           </p>
-          <p class="text-red text-xs">{{ formatGrowth(weekly.faded?.growth_pct) }}%</p>
+          <p v-if="weekly.faded?.name" class="text-red text-xs">
+            {{ formatGrowth(weekly.faded.growth_pct) }}%
+          </p>
+          <p v-else class="text-text-muted mt-1 text-sm">None this week</p>
         </div>
       </div>
     </section>
