@@ -56,8 +56,9 @@
     <section v-if="weekly" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Weekly Recap</h2>
       <div class="grid grid-cols-1 gap-4 min-[375px]:grid-cols-2 md:grid-cols-4">
-        <div
-          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+        <NuxtLink
+          :to="trendPath(weekly.most_discussed?.name || '')"
+          class="glass-card tooltip hover:border-accent/30 min-w-0 cursor-pointer p-4 transition"
           data-tooltip="Most mentioned tech this week"
         >
           <p class="text-text-secondary text-xs font-medium">Most Discussed</p>
@@ -66,9 +67,10 @@
             {{ weekly.most_discussed?.name }}
           </p>
           <p class="text-text-muted text-xs">{{ weekly.most_discussed?.mentions }} mentions</p>
-        </div>
-        <div
-          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+        </NuxtLink>
+        <NuxtLink
+          :to="trendPath(weekly.rising_tool?.name || '')"
+          class="glass-card tooltip hover:border-accent/30 min-w-0 cursor-pointer p-4 transition"
           data-tooltip="Emerging tech with fastest growth"
         >
           <p class="text-text-secondary text-xs font-medium">Rising Tool</p>
@@ -77,9 +79,10 @@
             {{ weekly.rising_tool?.name }}
           </p>
           <p class="text-success text-xs">+{{ formatGrowth(weekly.rising_tool?.growth_pct) }}%</p>
-        </div>
-        <div
-          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+        </NuxtLink>
+        <NuxtLink
+          :to="trendPath(weekly.community_vibe?.top_positive || '')"
+          class="glass-card tooltip hover:border-accent/30 min-w-0 cursor-pointer p-4 transition"
           data-tooltip="Overall community sentiment this week"
         >
           <p class="text-text-secondary text-xs font-medium">Community Vibe</p>
@@ -102,22 +105,26 @@
           <p class="text-text-muted mt-1 text-[10px]">
             {{ formatVibe(weekly.community_vibe?.average_sentiment) }}
           </p>
-        </div>
-        <div
-          class="glass-card tooltip min-w-0 cursor-pointer p-4"
+        </NuxtLink>
+        <NuxtLink
+          v-if="weekly.faded?.name"
+          :to="trendPath(weekly.faded.name)"
+          class="glass-card tooltip hover:border-accent/30 min-w-0 cursor-pointer p-4 transition"
           data-tooltip="Tech losing momentum this week"
         >
           <p class="text-text-secondary text-xs font-medium">Faded</p>
-          <p
-            v-if="weekly.faded?.name"
-            class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold"
-          >
+          <p class="mt-1 flex items-center gap-1.5 truncate text-lg font-bold">
             <TechIcon :name="weekly.faded.name" size="sm" /> {{ weekly.faded.name }}
           </p>
-          <p v-if="weekly.faded?.name" class="text-red text-xs">
-            {{ formatGrowth(weekly.faded.growth_pct) }}%
-          </p>
-          <p v-else class="text-text-muted mt-1 text-sm">None this week</p>
+          <p class="text-red text-xs">{{ formatGrowth(weekly.faded.growth_pct) }}%</p>
+        </NuxtLink>
+        <div
+          v-else
+          class="glass-card tooltip min-w-0 p-4"
+          data-tooltip="Tech losing momentum this week"
+        >
+          <p class="text-text-secondary text-xs font-medium">Faded</p>
+          <p class="text-text-muted mt-1 text-sm">None this week</p>
         </div>
       </div>
     </section>
@@ -136,36 +143,44 @@
     <section v-if="monthly?.big_mover?.name" class="mb-10">
       <h2 class="mb-4 text-xl font-bold">Monthly Pulse</h2>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div class="glass-card p-5">
+        <NuxtLink
+          :to="trendPath(monthly.big_mover.name)"
+          class="glass-card hover:border-accent/30 p-5 transition"
+        >
           <p class="text-text-secondary text-xs font-medium">Big Mover</p>
           <p class="mt-1 flex items-center gap-1.5 text-lg font-bold">
             <TechIcon :name="monthly.big_mover.name" size="sm" />
             {{ monthly.big_mover.name }}
           </p>
           <p class="text-success text-xs">+{{ monthly.big_mover.rank_change }} ranks</p>
-        </div>
+        </NuxtLink>
         <div class="glass-card p-5">
           <p class="text-text-secondary text-xs font-medium">Sustained Hype</p>
           <div class="mt-1 flex flex-wrap gap-1.5">
-            <span
+            <NuxtLink
               v-for="t in (monthly.sustained_hype || []).slice(0, 4)"
               :key="t.name"
-              class="border-border flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
+              :to="trendPath(t.name)"
+              class="border-border hover:border-accent flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs transition"
             >
               <TechIcon :name="t.name" size="sm" /> {{ t.name }}
-            </span>
+            </NuxtLink>
           </div>
         </div>
-        <div class="glass-card p-5">
+        <NuxtLink
+          v-if="monthly.under_radar?.name"
+          :to="trendPath(monthly.under_radar.name)"
+          class="glass-card hover:border-accent/30 p-5 transition"
+        >
           <p class="text-text-secondary text-xs font-medium">Under the Radar</p>
-          <p
-            v-if="monthly.under_radar?.name"
-            class="mt-1 flex items-center gap-1.5 text-lg font-bold"
-          >
+          <p class="mt-1 flex items-center gap-1.5 text-lg font-bold">
             <TechIcon :name="monthly.under_radar.name" size="sm" />
             {{ monthly.under_radar.name }}
           </p>
-          <p v-else class="text-text-muted mt-1 text-sm">None detected</p>
+        </NuxtLink>
+        <div v-else class="glass-card p-5">
+          <p class="text-text-secondary text-xs font-medium">Under the Radar</p>
+          <p class="text-text-muted mt-1 text-sm">None detected</p>
         </div>
       </div>
     </section>
