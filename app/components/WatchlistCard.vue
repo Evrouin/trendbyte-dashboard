@@ -1,10 +1,18 @@
 <template>
   <div v-if="data" class="text-sm">
+    <div class="mb-1 flex flex-wrap gap-1">
+      <TrendBadges
+        :sources="data.trend.sources"
+        :growth-pct="data.trend.growth_pct"
+        :lifecycle="lifecycle"
+      />
+    </div>
     <p class="text-text-secondary">
-      Score: <span class="text-text font-semibold">{{ Math.round(data.trend.score) }}</span>
-    </p>
-    <p class="text-text-secondary capitalize">
-      Lifecycle: <span class="text-accent font-semibold">{{ lifecycle }}</span>
+      Score:
+      <span class="text-text font-semibold">{{
+        Math.round(data.trend.score).toLocaleString()
+      }}</span>
+      · {{ data.trend.mentions }} mentions
     </p>
   </div>
   <p v-else class="text-text-muted text-xs">Loading...</p>
