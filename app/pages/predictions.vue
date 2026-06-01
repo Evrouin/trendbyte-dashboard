@@ -1,58 +1,76 @@
 <template>
   <div>
-    <h1 class="mb-2 text-3xl font-extrabold">Predictions</h1>
-    <p class="text-text-secondary mb-8">Technologies showing early signs of trending.</p>
+    <h1 class="mb-2 text-3xl font-extrabold">Rising Stars</h1>
+    <p class="text-text-secondary mb-8">
+      Technologies showing early signs of trending, detected by our ML model.
+    </p>
 
     <ErrorState v-if="error" message="Failed to load predictions" :retry="true" @retry="refresh" />
 
-    <div
-      v-else-if="store.predictions.length"
-      class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
-    >
-      <NuxtLink
-        v-for="p in store.predictions"
-        :key="p.name"
-        :to="trendPath(p.name)"
-        class="glass-card hover:border-accent/30 flex min-w-0 flex-col justify-between overflow-hidden p-5 transition"
-      >
-        <div>
-          <div class="mb-3 flex items-center justify-between">
-            <span class="text-lg font-bold"
-              ><TechIcon :name="p.name" size="sm" /> {{ p.name }}</span
-            >
-            <span
-              class="rounded-full px-2.5 py-0.5 text-xs font-bold"
-              :class="confidenceColor(p.confidence)"
-            >
-              {{ (p.confidence * 100).toFixed(0) }}%
-            </span>
-          </div>
-          <div class="flex flex-wrap gap-1.5">
-            <span
-              v-for="signal in p.signals"
-              :key="signal"
-              class="border-border-subtle bg-surface-hover text-text-secondary rounded-md border px-2 py-0.5 text-xs"
-            >
-              {{ formatSignal(signal) }}
-            </span>
-          </div>
+    <div v-else-if="highConfidence.length || moderate.length">
+      <section v-if="highConfidence.length" class="mb-8">
+        <h2 class="text-text-secondary mb-3 text-sm font-semibold uppercase">High Confidence</h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <NuxtLink
+            v-for="p in highConfidence"
+            :key="p.name"
+            :to="trendPath(p.name)"
+            class="glass-card hover:border-accent/30 flex items-start gap-4 p-5 transition"
+          >
+            <TechIcon :name="p.name" size="md" />
+            <div class="min-w-0 flex-1">
+              <p class="text-lg font-bold">{{ p.name }}</p>
+              <div class="mt-1 flex flex-wrap gap-1.5">
+                <span
+                  v-for="signal in p.signals"
+                  :key="signal"
+                  class="border-border-subtle bg-surface-hover text-text-secondary rounded-md border px-2 py-0.5 text-xs"
+                >
+                  {{ formatSignal(signal) }}
+                </span>
+              </div>
+              <p class="text-text-muted mt-2 text-xs">
+                Spotted {{ formatRelative(p.predicted_at) }}
+              </p>
+            </div>
+          </NuxtLink>
         </div>
-        <div class="text-text-muted mt-4 flex items-center justify-between text-xs">
-          <span>{{ new Date(p.predicted_at).toLocaleDateString() }}</span>
+      </section>
+
+      <section v-if="moderate.length">
+        <h2 class="text-text-secondary mb-3 text-sm font-semibold uppercase">Watch List</h2>
+        <div class="glass-card overflow-hidden">
+          <NuxtLink
+            v-for="p in moderate"
+            :key="p.name"
+            :to="trendPath(p.name)"
+            class="border-border hover:bg-surface-hover flex items-center gap-3 border-b px-5 py-3 transition last:border-0"
+          >
+            <TechIcon :name="p.name" size="sm" />
+            <span class="font-medium">{{ p.name }}</span>
+            <div class="flex flex-wrap gap-1">
+              <span v-for="signal in p.signals" :key="signal" class="text-text-muted text-[10px]">
+                {{ formatSignal(signal) }}
+              </span>
+            </div>
+            <span class="text-text-muted ml-auto text-xs">{{
+              formatRelative(p.predicted_at)
+            }}</span>
+          </NuxtLink>
         </div>
-      </NuxtLink>
+      </section>
     </div>
 
     <div v-else class="glass-card p-8 text-center">
       <p class="text-text-secondary">
-        No predictions yet. Data accumulates after multiple pipeline runs.
+        No rising stars detected yet. Data accumulates after multiple pipeline runs.
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-useHead({ title: 'Predictions — TrendByte' })
+useHead({ title: 'Rising Stars — TrendByte' })
 import { formatSignal } from '~/utils/formatSignal'
 import { useTrendsStore } from '~/stores/trends'
 
@@ -65,6 +83,9 @@ try {
   error.value = true
 }
 
+const highConfidence = computed(() => store.predictions.filter((p) => p.confidence >= 0.6))
+const moderate = computed(() => store.predictions.filter((p) => p.confidence < 0.6))
+
 const refresh = async () => {
   error.value = false
   try {
@@ -75,9 +96,11 @@ const refresh = async () => {
   }
 }
 
-const confidenceColor = (confidence: number) => {
-  if (confidence >= 0.7) return 'bg-success/30 text-success'
-  if (confidence >= 0.5) return 'bg-yellow/30 text-yellow'
-  return 'bg-accent/20 text-accent'
+const formatRelative = (date: string) => {
+  const diff = Date.now() - new Date(date).getTime()
+  const days = Math.floor(diff / 86400000)
+  if (days === 0) return 'today'
+  if (days === 1) return 'yesterday'
+  return `${days}d ago`
 }
 </script>
