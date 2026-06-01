@@ -101,15 +101,15 @@
               <span
                 class="inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold"
                 :class="
-                  i === 0
+                  scoreRanks[trend.name] === 0
                     ? 'bg-yellow-500/20 text-yellow-500'
-                    : i === 1
+                    : scoreRanks[trend.name] === 1
                       ? 'bg-gray-300/20 text-gray-300'
-                      : i === 2
+                      : scoreRanks[trend.name] === 2
                         ? 'bg-orange-400/20 text-orange-400'
                         : 'bg-surface-hover text-text-muted'
                 "
-                >{{ i + 1 }}</span
+                >{{ (scoreRanks[trend.name] ?? i) + 1 }}</span
               >
             </td>
             <td class="px-5 py-3 font-bold">
@@ -151,15 +151,15 @@
             <span
               class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold"
               :class="
-                i === 0
+                scoreRanks[trend.name] === 0
                   ? 'bg-yellow-500/20 text-yellow-500'
-                  : i === 1
+                  : scoreRanks[trend.name] === 1
                     ? 'bg-gray-300/20 text-gray-300'
-                    : i === 2
+                    : scoreRanks[trend.name] === 2
                       ? 'bg-orange-400/20 text-orange-400'
                       : 'bg-surface-hover text-text-muted'
               "
-              >{{ i + 1 }}</span
+              >{{ (scoreRanks[trend.name] ?? i) + 1 }}</span
             >
             <div>
               <p class="text-accent flex items-center gap-1.5 font-bold">
@@ -238,6 +238,16 @@ const filteredTrends = computed(() => {
     items = [...items].sort((a: any, b: any) => (a[sortKey.value] - b[sortKey.value]) * dir)
   }
   return items
+})
+
+const scoreRanks = computed(() => {
+  if (!trends.value?.trends) return {}
+  const sorted = [...trends.value.trends].sort((a: any, b: any) => b.score - a.score)
+  const ranks: Record<string, number> = {}
+  sorted.forEach((t: any, idx: number) => {
+    ranks[t.name] = idx
+  })
+  return ranks
 })
 
 onMounted(() => {
