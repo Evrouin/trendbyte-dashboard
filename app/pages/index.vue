@@ -132,6 +132,44 @@
       </div>
     </section>
 
+    <!-- Monthly Pulse -->
+    <section v-if="monthly?.big_mover?.name" class="mb-10">
+      <h2 class="mb-4 text-xl font-bold">Monthly Pulse</h2>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="glass-card p-5">
+          <p class="text-text-secondary text-xs font-medium">Big Mover</p>
+          <p class="mt-1 flex items-center gap-1.5 text-lg font-bold">
+            <TechIcon :name="monthly.big_mover.name" size="sm" />
+            {{ monthly.big_mover.name }}
+          </p>
+          <p class="text-success text-xs">+{{ monthly.big_mover.rank_change }} ranks</p>
+        </div>
+        <div class="glass-card p-5">
+          <p class="text-text-secondary text-xs font-medium">Sustained Hype</p>
+          <div class="mt-1 flex flex-wrap gap-1.5">
+            <span
+              v-for="t in (monthly.sustained_hype || []).slice(0, 4)"
+              :key="t.name"
+              class="border-border flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs"
+            >
+              <TechIcon :name="t.name" size="sm" /> {{ t.name }}
+            </span>
+          </div>
+        </div>
+        <div class="glass-card p-5">
+          <p class="text-text-secondary text-xs font-medium">Under the Radar</p>
+          <p
+            v-if="monthly.under_radar?.name"
+            class="mt-1 flex items-center gap-1.5 text-lg font-bold"
+          >
+            <TechIcon :name="monthly.under_radar.name" size="sm" />
+            {{ monthly.under_radar.name }}
+          </p>
+          <p v-else class="text-text-muted mt-1 text-sm">None detected</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Stats row -->
     <section
       v-if="!store.stats"
@@ -400,6 +438,10 @@ const { data: daily } = await useFetch<Record<string, any>>(
 )
 const { data: weekly } = await useFetch<Record<string, any>>(
   `${config.public.apiUrl}/api/content/weekly`,
+  { lazy: true },
+)
+const { data: monthly } = await useFetch<Record<string, any>>(
+  `${config.public.apiUrl}/api/content/monthly`,
   { lazy: true },
 )
 const risingStars = computed(() => risingData.value?.predictions || [])
