@@ -144,6 +144,12 @@
       </div>
     </section>
   </div>
+  <div v-else class="py-20 text-center">
+    <p class="text-text-secondary text-lg">No trend data available yet for this technology.</p>
+    <NuxtLink to="/trends" class="text-accent mt-4 inline-block text-sm hover:underline">
+      &larr; Back to trends
+    </NuxtLink>
+  </div>
 </template>
 
 <script setup lang="ts">
