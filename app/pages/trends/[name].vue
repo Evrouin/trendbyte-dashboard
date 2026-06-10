@@ -144,7 +144,7 @@
       </div>
     </section>
   </div>
-  <div v-else class="py-20 text-center">
+  <div v-else-if="status === 'success'" class="py-20 text-center">
     <p class="text-text-secondary text-lg">No trend data available yet for this technology.</p>
     <NuxtLink to="/trends" class="text-accent mt-4 inline-block text-sm hover:underline">
       &larr; Back to trends
@@ -172,7 +172,7 @@ useHead({ title: `${safeName} — TrendByte` })
 
 const granularity = ref('weekly')
 
-const { data } = await useFetch<{
+const { data, status } = await useFetch<{
   trend: { name: string; score: number; sources: string[]; mentions: number; growth_pct: number }
   history: { score: number; calculated_at: string }[]
   posts: {
