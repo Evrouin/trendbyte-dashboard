@@ -197,7 +197,7 @@ useHead({ title: 'Trends — TrendByte' })
 const store = useTrendsStore()
 
 const search = ref('')
-const selectedDays = ref(30)
+const selectedDays = ref(7)
 const dropdownOpen = ref(false)
 
 const selectDays = (days: number) => {
